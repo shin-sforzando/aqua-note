@@ -8,7 +8,7 @@
 
 <!-- Synopsis -->
 
-Aquarium Management Notebook on the Web.
+Aquarium Management Note on the Web.
 
 <!-- TOC -->
 
