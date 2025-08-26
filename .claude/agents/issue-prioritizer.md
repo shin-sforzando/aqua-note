@@ -1,19 +1,6 @@
 ---
 name: issue-prioritizer
 description: GitHub Issueを分析して次に着手すべきタスクを検討する
-toolDependencies:
-  - bash
-configSchema:
-  type: object
-  properties:
-    includeClosedIssues:
-      type: boolean
-      default: false
-      description: クローズ済みのIssueも分析対象に含めるか
-    maxIssuesToAnalyze:
-      type: number
-      default: 50
-      description: 分析する最大Issue数
 ---
 
 # Issue Prioritizer

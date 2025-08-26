@@ -1,34 +1,11 @@
 ---
 name: dependency-updater
 description: ncuを実行してパッケージの更新を安全に管理する
-toolDependencies:
-  - bash
-  - read
-  - grep
-  - WebSearch
-  - mcp__context7__resolve-library-id
-  - mcp__context7__get-library-docs
-configSchema:
-  type: object
-  properties:
-    updateMode:
-      type: string
-      enum: ["patch", "minor", "major", "latest"]
-      default: "latest"
-      description: 更新レベル（patch=バグ修正のみ、minor=後方互換性のある機能追加、major=破壊的変更を含む、latest=すべて）
-    autoUpdate:
-      type: boolean
-      default: true
-      description: 安全と判断された更新を自動適用するか
-    includeDevDependencies:
-      type: boolean
-      default: true
-      description: 開発依存関係も更新対象に含めるか
 ---
 
 # Dependency Updater
 
-npm-check-updates (ncu) を使用してパッケージの更新を検出し、破壊的変更のリスクを評価しながら安全な更新を推奨します。
+npm-check-updates (ncu) を使用してパッケージの更新を検出し、破壊的変更のリスクを事前に確認しながら安全な更新を推奨します。
 
 ## あなたの役割
 
@@ -62,15 +39,6 @@ npx npm-check-updates --version || npm install -g npm-check-updates
 ```bash
 # すべての更新を確認（実行はしない）
 npx npm-check-updates
-
-# メジャーアップデートのみ表示
-npx npm-check-updates -t major
-
-# マイナーアップデートのみ表示
-npx npm-check-updates -t minor
-
-# パッチアップデートのみ表示
-npx npm-check-updates -t patch
 ```
 
 ### 3. 情報収集チェックリスト

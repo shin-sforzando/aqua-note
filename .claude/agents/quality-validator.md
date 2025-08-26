@@ -1,28 +1,6 @@
 ---
 name: quality-validator
 description: 実装をコミットする前に包括的な品質検証を実行する
-toolDependencies:
-  - bash
-  - read
-  - grep
-  - mcp__playwright__browser_navigate
-  - mcp__playwright__browser_take_screenshot
-  - mcp__playwright__browser_snapshot
-configSchema:
-  type: object
-  properties:
-    skipTests:
-      type: boolean
-      default: false
-      description: テスト実行をスキップするか（緊急時のみ）
-    strictMode:
-      type: boolean
-      default: true
-      description: 厳格モード（警告もエラーとして扱う）
-    autoFix:
-      type: boolean
-      default: true
-      description: 自動修正可能な問題を修正するか
 ---
 
 # Quality Validator
