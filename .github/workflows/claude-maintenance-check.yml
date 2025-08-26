@@ -1,0 +1,83 @@
+name: Claude Maintenance Check
+
+on:
+  schedule:
+    # 毎日午前12時(JST)に実行
+    - cron: '0 3 * * *'
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  maintenance-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Run Claude Code for maintenance check
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          # Prompt for maintenance check
+          prompt: |
+            mainブランチの定期メンテナンスチェックを実行してください:
+
+            ## 1. 依存ライブラリの更新チェック
+              - package.jsonのnpm依存関係
+              - GitHub Actionsで使用されているアクションのバージョン
+
+            ## 2. ドキュメントの整合性チェック
+              - @README.md の内容が最新の実装と一致しているか
+              - @CLAUDE.md の内容が現在のプロジェクト状態を反映しているか
+              - 各種設定ファイルのコメントが実際の設定と一致しているか
+
+            ## 3. セキュリティチェック
+              - 既知の脆弱性がある依存関係の有無
+              - 非推奨となったAPIや機能の使用有無
+              - ハードコードされた認証情報やシークレットの有無
+
+            ## 4. コード品質チェック
+              - 未使用のimportやデッドコードの有無
+              - TODO/FIXMEコメントのリストアップ
+              - テストカバレッジの現状
+
+            ## 5. 既存コードとの一貫性チェック
+              - 命名規則の一貫性(変数名、関数名、クラス名のパターン)
+              - エラーハンドリングの統一性(例外処理の方法、エラーメッセージの形式)
+              - ログ出力の一貫性(ログレベルの使い分け、メッセージフォーマット)
+              - APIレスポンスの形式統一(成功/エラー時のレスポンス構造)
+              - 設定値の管理方法の統一(環境変数、設定ファイルの使い分け)
+
+            重要:
+              - 改善が必要な項目がある場合のみPRを作成してください
+              - 問題がない場合はPRを作成する必要はありません
+              - PRを作成する場合は、タイトルに「[maintenance]」を含めてください(自動レビューをスキップするため)
+              - 各PRには具体的な改善内容を記載し、なぜその変更が必要かを説明してください
+
+          # Custom arguments for the project
+          claude_args: |
+            --system-prompt "日本語で応答してください。
+            プロジェクト全体の定期メンテナンスチェックを実行しています。
+            CLAUDE.mdファイルの内容を参照し、プロジェクトの技術スタックと開発方針を理解した上でチェックしてください。
+
+            チェック結果は以下の形式でまとめてください:
+              1. 緊急度が高い問題(セキュリティ脆弱性など)
+              2. 推奨される更新(メジャーバージョンアップなど)
+              3. 任意の改善提案
+
+            必要に応じて、改善のためのPRを作成してください。"
+            --allowedTools "Bash(npm outdated)"
+            --allowedTools "Bash(git grep -n 'TODO|FIXME')"
+            --allowedTools "Bash(gh pr create:*)"
+
+          # Enable commit signing for security
+          use_commit_signing: true

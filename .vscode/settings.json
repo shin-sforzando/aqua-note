@@ -2,5 +2,13 @@
   "[svelte]": {
      "editor.defaultFormatter": "svelte.svelte-vscode"
    },
-	"cSpell.words": ["inlang", "libsql", "mdsvex", "oslojs", "paraglide", "vite"]
+	"cSpell.words": [
+    "anthropics",
+    "inlang",
+    "libsql",
+    "mdsvex",
+    "oslojs",
+    "paraglide",
+    "vite"
+  ]
 }

@@ -35,16 +35,27 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          
+
+          prompt: |
+            日本語で応答してください。
+            重要: PRレビューの際は、必ず最新のコミットの内容を確認して回答してください。古いコミットの内容で回答しないよう注意してください。
+            @CLAUDE.md を参照し、プロジェクトの開発方針を理解した上で回答してください。
+
+          # Optional: Allow Claude to run specific commands
+          # claude_args: |
+          #   --allowedTools "Bash(npm install)"
+          #   --allowedTools "Bash(npm run build)"
+          #   --allowedTools "Bash(npm run test:*)"
+          #   --allowedTools "Bash(npm run lint:*)"
+
+          # Enable commit signing for security
+          use_commit_signing: true
+
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
-
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://docs.anthropic.com/en/docs/claude-code/sdk#command-line for available options
           # claude_args: '--model claude-opus-4-1-20250805 --allowed-tools Bash(gh pr:*)'
-
