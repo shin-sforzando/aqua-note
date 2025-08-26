@@ -22,6 +22,14 @@
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},
+	"dependencies": {
+		"@inlang/paraglide-js": "^2.0.0",
+		"@libsql/client": "^0.14.0",
+		"@node-rs/argon2": "^2.0.2",
+		"@oslojs/crypto": "^1.0.1",
+		"@oslojs/encoding": "^1.1.0",
+		"drizzle-orm": "^0.40.0"
+	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^4.1.1",
 		"@eslint/compat": "^1.2.5",
@@ -58,13 +66,5 @@
 		"vite-plugin-devtools-json": "^1.0.0",
 		"vitest": "^3.2.3",
 		"vitest-browser-svelte": "^0.1.0"
-	},
-	"dependencies": {
-		"@inlang/paraglide-js": "^2.0.0",
-		"@libsql/client": "^0.14.0",
-		"@node-rs/argon2": "^2.0.2",
-		"@oslojs/crypto": "^1.0.1",
-		"@oslojs/encoding": "^1.1.0",
-		"drizzle-orm": "^0.40.0"
 	}
 }

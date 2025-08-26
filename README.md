@@ -1,38 +1,67 @@
-# sv
+# aqua-note
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+<!-- Badges -->
 
-## Creating a project
+[![Last Commit](https://img.shields.io/github/last-commit/shin-sforzando/aqua-note)](https://github.com/shin-sforzando/aqua-note/graphs/commit-activity)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-If you're seeing this, you've probably already done this step. Congrats!
+<!-- Synopsis -->
 
-```sh
-# create a new project in the current directory
-npx sv create
+Aquarium Management Notebook on the Web.
 
-# create a new project in my-app
-npx sv create my-app
-```
+<!-- TOC -->
 
-## Developing
+- [Tech Stack](#tech-stack)
+- [How to](#how-to)
+  - [Setup](#setup)
+  - [Develop](#develop)
+  - [Deploy](#deploy)
+  - [Contribute](#contribute)
+- [Misc](#misc)
+  - [Contribution](#contribution)
+  - [License](#license)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Tech Stack
 
-```sh
-npm run dev
+- Web Framework: [SvelteKit](https://svelte.jp) v5
+- CSS Framework: [Tailwind CSS](https://tailwindcss.com) v4
+- UI/UX: [Svelte-UX](https://svelte-ux.techniq.dev)
+  - Chart: [LayerChart](https://www.layerchart.com)
+- UI Catalogue: [Storybook](https://storybook.js.org) v9
+- Unit Testing: [Vitest](https://vitest.dev)
+- E2E Testing: [Playwright](https://playwright.dev)
+- Formatter: [Prettier](https://prettier.io)
+- Linter: [ESLint](https://eslint.org)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## How to
 
-## Building
+(T. B. D.)
 
-To create a production version of your app:
+### Setup
 
-```sh
-npm run build
-```
+(T. B. D.)
 
-You can preview the production build with `npm run preview`.
+### Develop
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+(T. B. D.)
+
+### Deploy
+
+(T. B. D.)
+
+### Contribute
+
+(T. B. D.)
+
+## Misc
+
+This repository is [Commitizen](https://commitizen.github.io/cz-cli/) friendly, following [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow).
+
+### Contribution
+
+(T. B. D.)
+
+### License
+
+MIT License.
