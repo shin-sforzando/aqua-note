@@ -6,33 +6,50 @@ labels: 'bug'
 assignees: 'shin-sforzando'
 ---
 
-## Screenshots
+## 概要
 
-(T. B. D.; If applicable, add screenshots to help explain your problem.)
+[バグの簡潔な説明]
 
-## Describe the bug
+### スクリーンショット
 
-(T. B. D.; A clear and concise description of what the bug is.)
+[不具合の証拠]
 
-## Expected behavior
+## 優先度
 
-(T. B. D.; A clear and concise description of what you expected to happen.)
+1.0
 
-## To reproduce
+[バグ修正は原則として最優先。影響が限定的な場合は0.8〜0.9に調整可能]
 
-### Environments
+## 現象
 
-(T. B. D.; As much detail as possible about the environment in which the defect was found.)
+[どのような問題が発生しているか]
 
-### Steps to reproduce
+## 再現手順
 
-(T. B. D.)
+1. 手順1
+2. 手順2
+3. 手順3
 
-1. Go to `...`
-2. Click on `...`
-3. Scroll down to `...`
-4. See error
+## 期待される動作
 
-## Appendix
+[本来どのように動作すべきか]
 
-(T. B. D.; Add any other context about the problem here.)
+## 実際の動作
+
+[現在どのように動作しているか]
+
+## 修正内容
+
+- [ ] 原因の特定
+- [ ] 修正の実装
+- [ ] テストケースの追加
+
+## 環境情報
+
+- ブラウザ:
+- OS:
+- その他関連情報:
+
+## 関連Issue
+
+- #XXX（もしあれば）

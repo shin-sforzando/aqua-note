@@ -142,4 +142,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/osx,linux,windows,visualstudiocode,data
 
-# Project Specific
+### Project Specific ###
+
+# Playwright MCP generated files (screenshots, etc.)
+.playwright-mcp/
