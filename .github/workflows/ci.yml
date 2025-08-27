@@ -31,6 +31,9 @@ jobs:
         run: npm ci
 
       - name: Run format check
+        run: npm run format
+
+      - name: Run lint check
         run: npm run lint
 
       - name: Run type check
@@ -121,7 +124,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env preview
+          command: deploy --env preview --name aqua-note-pr-${{ github.event.number }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
@@ -130,7 +133,8 @@ jobs:
         if: success()
         with:
           script: |
-            const preview_url = `https://aqua-note-preview.${process.env.CF_ACCOUNT_SUBDOMAIN}.workers.dev`;
+            const name = `aqua-note-pr-${context.issue.number}`;
+            const preview_url = `https://${name}.${process.env.CF_ACCOUNT_SUBDOMAIN}.workers.dev`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

@@ -32,6 +32,9 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run format check
+        run: npm run format
+
+      - name: Run lint check
         run: npm run lint
 
       - name: Run type check
