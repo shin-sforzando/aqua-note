@@ -18,6 +18,9 @@ enabled = true
 [placement]
 mode = "smart"
 
+[env.production]
+name = "aqua-note"
+
 # D1 Database Configuration
 [[d1_databases]]
 binding = "aqua_note_db"
@@ -36,6 +39,3 @@ binding = "aqua_note_db"
 database_name = "aqua-note-preview-db"
 database_id = "899aa230-eb69-47a8-bb3f-bf7ec92fa398"
 migrations_dir = "drizzle"
-
-[env.production]
-name = "aqua-note"
