@@ -40,8 +40,8 @@
 
 ## デプロイ
 
-- **プラットフォーム**: Cloudflare Pages/Workers（予定）
-- **アダプター**: 現在は @sveltejs/adapter-auto、本番では @sveltejs/adapter-cloudflare に切り替え予定
+- **プラットフォーム**: Cloudflare Workers
+- **アダプター**: @sveltejs/adapter-cloudflare
 
 ## 主要な依存関係
 

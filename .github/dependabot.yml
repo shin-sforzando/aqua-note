@@ -1,0 +1,69 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 10
+    groups:
+      # SvelteKitとその関連パッケージ
+      sveltekit:
+        patterns:
+          - '@sveltejs/*'
+          - 'svelte'
+          - 'svelte-*'
+      # Storybookとその関連パッケージ
+      storybook:
+        patterns:
+          - '@storybook/*'
+          - 'storybook'
+      # Viteとその関連パッケージ
+      vite:
+        patterns:
+          - 'vite'
+          - '@vitejs/*'
+          - 'vitest'
+      # Cloudflare関連パッケージ
+      cloudflare:
+        patterns:
+          - '@cloudflare/*'
+          - 'wrangler'
+      # 型定義パッケージ
+      types:
+        patterns:
+          - '@types/*'
+      # Lintツール
+      linters:
+        patterns:
+          - 'eslint*'
+          - 'prettier*'
+          - '@eslint/*'
+          - '@typescript-eslint/*'
+      # テストツール
+      testing:
+        patterns:
+          - 'playwright'
+          - '@playwright/*'
+          - 'vitest'
+          - '@vitest/*'
+    commit-message:
+      prefix: 'chore'
+      prefix-development: 'chore'
+      include: 'scope'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
