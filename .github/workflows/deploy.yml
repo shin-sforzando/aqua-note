@@ -28,20 +28,14 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build project (generates Paraglide files)
+        run: npm run build
+
       - name: Run format check
         run: npm run format
 
       - name: Run lint check
         run: npm run lint
-
-      - name: Debug - Check Paraglide files
-        run: |
-          echo "=== Checking Paraglide directory structure ==="
-          ls -la src/lib/ || echo "src/lib/ does not exist"
-          ls -la src/lib/paraglide/ || echo "src/lib/paraglide/ does not exist"
-          echo "=== Checking for generated Paraglide files ==="
-          ls -la src/lib/paraglide/runtime.js 2>/dev/null || echo "runtime.js not found"
-          ls -la src/lib/paraglide/server.js 2>/dev/null || echo "server.js not found"
 
       - name: Run type check
         run: npm run check
