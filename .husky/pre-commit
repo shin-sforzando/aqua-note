@@ -2,19 +2,15 @@
 
 echo "🔍 Running pre-commit checks..."
 
-# 1. フォーマットチェック
-echo "📝 Checking code formatting..."
-npm run format
-
-# 2. Lintチェック
-echo "🔎 Running lint checks..."
-npm run lint
+# 1. lint-staged（変更されたファイルのみフォーマット＆lint）
+echo "📝 Running lint-staged on changed files..."
+npx lint-staged
 if [ $? -ne 0 ]; then
-  echo "❌ Lint check failed. Please fix the errors before committing."
+  echo "❌ Lint-staged failed. Please fix the errors before committing."
   exit 1
 fi
 
-# 3. 型チェック
+# 2. 型チェック（全体をチェック）
 echo "🔍 Running type checks..."
 npm run check
 if [ $? -ne 0 ]; then
@@ -22,7 +18,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# 4. ユニットテスト
+# 3. ユニットテスト
 echo "🧪 Running unit tests..."
 npm run test:unit -- --run
 if [ $? -ne 0 ]; then
@@ -30,7 +26,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# 5. E2Eテスト
+# 4. E2Eテスト
 echo "🎭 Running E2E tests..."
 npm run test:e2e
 if [ $? -ne 0 ]; then
