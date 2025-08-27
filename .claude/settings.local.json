@@ -1,30 +1,32 @@
 {
-	"outputStyle": "Explanatory",
-	"permissions": {
-		"allow": [
-			"Bash(gh issue create:*)",
-			"Bash(gh issue list:*)",
-			"Bash(gh issue view:*)",
-			"Bash(npm install)",
-			"Bash(npm run build:*)",
-			"Bash(npm run check:*)",
-			"Bash(npm run format)",
-			"Bash(npm run lint)",
-			"Bash(npm run test:unit:*)",
-			"Bash(npx npm-check-updates:*)",
-			"mcp__context7__get-library-docs",
-			"mcp__playwright__browser_navigate",
-			"mcp__playwright__browser_take_screenshot",
-			"mcp__serena__check_onboarding_performed",
-			"mcp__serena__list_dir",
-			"mcp__serena__onboarding",
-			"mcp__serena__read_memory",
-			"mcp__serena__write_memory",
-			"WebFetch(domain:blog.cloudflare.com)",
-			"WebFetch(domain:developers.cloudflare.com)",
-			"WebFetch(domain:docs.mermaidchart.com)",
-			"WebFetch(domain:github.com)",
-			"WebSearch"
-		]
-	}
+  "permissions": {
+    "allow": [
+      "Bash(gh issue create:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(npm run check:*)",
+      "Bash(npm run format)",
+      "Bash(npm run lint)",
+      "Bash(npm run test:unit:*)",
+      "Bash(npx npm-check-updates:*)",
+      "mcp__context7__get-library-docs",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__list_dir",
+      "mcp__serena__onboarding",
+      "mcp__serena__read_memory",
+      "mcp__serena__write_memory",
+      "WebFetch(domain:blog.cloudflare.com)",
+      "WebFetch(domain:developers.cloudflare.com)",
+      "WebFetch(domain:docs.mermaidchart.com)",
+      "WebFetch(domain:github.com)",
+      "WebSearch"
+    ]
+  },
+  "outputStyle": "Explanatory"
 }
