@@ -9,6 +9,7 @@ on:
 env:
   DATABASE_URL: file:./test.db
   NODE_VERSION: '24'
+  HUSKY: 0  # Disable Husky in CI environment
 
 jobs:
   test:

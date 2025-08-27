@@ -20,6 +20,11 @@ runs:
       run: npm ci
       shell: bash
 
-    - name: Generate Paraglide files
-      run: npm run prepare
+    - name: Run SvelteKit sync and generate files
+      run: |
+        echo "🔄 Running svelte-kit sync..."
+        npx svelte-kit sync
+        echo "📂 Checking generated files..."
+        ls -la src/lib/paraglide/ 2>/dev/null || echo "⚠️ Paraglide directory not found after sync"
+        echo "✅ Setup complete"
       shell: bash
