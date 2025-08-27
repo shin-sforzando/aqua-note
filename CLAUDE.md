@@ -56,13 +56,15 @@ npm run test:e2e    # E2Eテストのみ
 
 ```bash
 # Drizzle Kit コマンド
-npm run db:push     # スキーマをDBにプッシュ
-npm run db:generate # マイグレーション生成
-npm run db:migrate  # マイグレーション実行
-npm run db:studio   # Drizzle Studio起動
+npm run db:generate        # マイグレーション生成
+npm run db:migrate:local   # ローカルD1にマイグレーション適用
+npm run db:migrate:remote  # リモートD1にマイグレーション適用
+npm run db:migrate:preview # プレビューD1にマイグレーション適用
+npm run db:studio          # Drizzle Studio起動
 ```
 
-環境変数 `DATABASE_URL` の設定が必要です（例: `DATABASE_URL=file:local.db` ）。
+データベースはCloudflare D1を使用。
+ローカル開発では自動的にD1エミュレーションが有効になります。
 
 ### UI開発
 
@@ -90,9 +92,7 @@ npm run build-storybook  # Storybookビルド
 
 - **フレームワーク**: SvelteKit v5 + Svelte v5
 - **スタイリング**: Tailwind CSS v4（ `@tailwindcss/vite` プラグイン経由）
-- **データベース**:
-  - 開発環境: SQLite + Drizzle ORM
-  - 本番環境: Cloudflare D1（予定）
+- **データベース**: Cloudflare D1
 - **ストレージ**: Cloudflare R2（予定）
 - **認証**: Lucia Auth（ `src/lib/server/auth.ts` ）
 - **国際化**: Paraglide（日本語・英語対応）
@@ -120,10 +120,12 @@ npm run build-storybook  # Storybookビルド
 
 今後実装予定のスキーマ:
 
+- ユーザ情報 (有料/無料)
 - 水槽情報
 - 生体情報
 - メンテナンス記録（水換え、給餌、清掃等）
 - 水質パラメータ記録
+- 画像
 
 ### テスト設定
 
@@ -134,12 +136,12 @@ Vitestは2つのプロジェクトで構成:
 
 ## 開発時の注意点
 
-1. **環境変数**: `.env.example` を参考に `.env` ファイルを作成
-2. **型安全性**: TypeScriptのstrict modeが有効
-3. **国際化**: Paraglideを使用、メッセージは `src/lib/paraglide/messages/` に配置
-4. **コミット**: Commitizen friendly、GitHub flowに準拠
-5. **認証**: Luciaを使用した認証実装例が `src/routes/demo/lucia/` に存在
-6. **デプロイ準備**: Cloudflareへのデプロイ時は `@sveltejs/adapter-cloudflare` への切り替えが必要
+1. **型安全性**: TypeScriptのstrict modeが有効
+2. **国際化**: Paraglideを使用、メッセージは `src/lib/paraglide/messages/` に配置
+3. **コミット**: Commitizen friendly、GitHub flowに準拠
+4. **認証**: platformベースの認証システム
+5. **データベース**: Cloudflare D1を使用、環境変数は不要
+6. **デプロイ**: `@sveltejs/adapter-cloudflare` を使用、Cloudflare Workersにデプロイ
 
 ## リファレンス
 
@@ -147,6 +149,7 @@ Vitestは2つのプロジェクトで構成:
 - [Tailwind CSS](https://tailwindcss.com/docs/installation/using-vite)
 - [Svelte-UX](https://svelte-ux.techniq.dev)
 - [LayerChart](https://www.layerchart.com)
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/)
 - [Cloudflare D1](https://developers.cloudflare.com/d1/)
 - [Cloudflare R2](https://developers.cloudflare.com/r2/)
-- [Cloudflare Workers](https://developers.cloudflare.com/workers/)
+- [drizzle](https://orm.drizzle.team/docs/overview)

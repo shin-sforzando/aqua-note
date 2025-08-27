@@ -1,6 +1,7 @@
 {
 	"permissions": {
 		"allow": [
+			"Bash(cat:*)",
 			"Bash(gh issue create:*)",
 			"Bash(gh issue list:*)",
 			"Bash(gh issue view:*)",
@@ -14,10 +15,12 @@
 			"Bash(npm run check:*)",
 			"Bash(npm run format)",
 			"Bash(npm run lint)",
+			"Bash(npm run test:e2e:*)",
 			"Bash(npm run test:unit:*)",
 			"Bash(npx npm-check-updates:*)",
 			"mcp__context7__get-library-docs",
 			"mcp__playwright__browser_navigate",
+			"mcp__playwright__browser_snapshot",
 			"mcp__playwright__browser_take_screenshot",
 			"mcp__serena__check_onboarding_performed",
 			"mcp__serena__list_dir",
@@ -29,6 +32,7 @@
 			"WebFetch(domain:docs.github.com)",
 			"WebFetch(domain:docs.mermaidchart.com)",
 			"WebFetch(domain:github.com)",
+			"WebFetch(domain:svelte.dev)",
 			"WebSearch"
 		]
 	},

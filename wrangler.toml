@@ -1,0 +1,41 @@
+# For more details on how to configure Wrangler, refer to:
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "aqua-note"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2025-08-26"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+binding = "ASSETS"
+directory = ".svelte-kit/cloudflare"
+
+[observability]
+enabled = true
+
+# Smart Placement
+# Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+[placement]
+mode = "smart"
+
+# D1 Database Configuration
+[[d1_databases]]
+binding = "aqua_note_db"
+database_name = "aqua-note-db"
+database_id = "a7f03bf7-852c-444a-8505-33f1a4edae52"
+migrations_dir = "drizzle"
+
+# Environment Configuration
+# Preview environment for pull requests
+[env.preview]
+name = "aqua-note-preview"
+
+# Preview environment D1 database
+[[env.preview.d1_databases]]
+binding = "aqua_note_db"
+database_name = "aqua-note-preview-db"
+database_id = "899aa230-eb69-47a8-bb3f-bf7ec92fa398"
+migrations_dir = "drizzle"
+
+[env.production]
+name = "aqua-note"

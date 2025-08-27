@@ -1,9 +1,13 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
+import type { D1Database } from '@cloudflare/workers-types';
+
 declare global {
 	namespace App {
 		interface Platform {
-			env: Env;
+			env: {
+				aqua_note_db: D1Database;
+			} & Env;
 			cf: CfProperties;
 			ctx: ExecutionContext;
 		}

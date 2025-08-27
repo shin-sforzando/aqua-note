@@ -29,6 +29,8 @@ Aquarium Management Note on the Web.
 
 - Web Framework: [SvelteKit](https://svelte.jp) v5
 - CSS Framework: [Tailwind CSS](https://tailwindcss.com) v4
+- Database: [Cloudflare D1](https://developers.cloudflare.com/d1/) (Serverless SQLite)
+- ORM: [Drizzle ORM](https://orm.drizzle.team/)
 - UI/UX: [Svelte-UX](https://svelte-ux.techniq.dev)
   - Chart: [LayerChart](https://www.layerchart.com)
 - UI Catalogue: [Storybook](https://storybook.js.org) v9
@@ -36,6 +38,7 @@ Aquarium Management Note on the Web.
 - E2E Testing: [Playwright](https://playwright.dev)
 - Formatter: [Prettier](https://prettier.io)
 - Linter: [ESLint](https://eslint.org)
+- Deployment: [Cloudflare Workers](https://workers.cloudflare.com/)
 
 ## How to
 
@@ -49,7 +52,13 @@ npm install
 
 # Create .env file (copy from example if available)
 cp .env.example .env  # Edit .env with your configuration
+
+# Initialize local D1 database
+npm run db:migrate:local
 ```
+
+> [!NOTE]
+> This project uses Cloudflare D1 as the database. Local development uses D1 emulation via wrangler.
 
 ### Develop
 
@@ -67,9 +76,19 @@ npm run format     # Auto-format
 npm run check      # Type check
 
 # Database operations
-npm run db:push     # Push schema to database
-npm run db:migrate  # Run migrations
-npm run db:studio   # Open Drizzle Studio
+npm run db:generate        # Generate migration files
+npm run db:migrate:local   # Apply migrations to local D1
+npm run db:migrate:remote  # Apply migrations to remote D1
+npm run db:migrate:preview # Apply migrations to preview D1
+npm run db:studio          # Open Drizzle Studio
+
+# Connect with external SQL clients (e.g., TablePlus)
+# Export local D1 database for viewing
+npx wrangler d1 export aqua-note-db --local --output local.db
+# Then open local.db in your SQL client
+
+# Query remote database directly
+npx wrangler d1 execute aqua-note-db --remote --command "SELECT * FROM user"
 ```
 
 ### Deploy
@@ -92,12 +111,14 @@ This project is configured for deployment to Cloudflare Workers.
 #### Manual Deployment
 
 ```bash
-# Build and deploy to production
+# Build the application
 npm run build
-npx wrangler deploy
 
 # Deploy to preview environment
-npx wrangler deploy --env preview
+npm run deploy:preview
+
+# Deploy to production
+npm run deploy:production
 ```
 
 ### Contribute
