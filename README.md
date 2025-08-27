@@ -22,7 +22,7 @@ Aquarium Management Note on the Web.
     - [Manual Deployment](#manual-deployment)
   - [Contribute](#contribute)
 - [Misc](#misc)
-  - [Contribution](#contribution)
+  - [Contributor](#contributor)
   - [License](#license)
 
 ## Tech Stack
@@ -102,15 +102,16 @@ npx wrangler deploy --env preview
 
 ### Contribute
 
-(T. B. D.)
+Please submit all bug reports, feature requests, and casual feedback to [GitHub Discussions](https://github.com/shin-sforzando/aqua-note/discussions).
+If you wish to join the development or acquire the business, we also accept such requests in the Discussions.
 
 ## Misc
 
 This repository is [Commitizen](https://commitizen.github.io/cz-cli/) friendly, following [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow).
 
-### Contribution
+### Contributor
 
-(T. B. D.)
+- [Shin'ichiro Suzuki](https://github.com/shin-sforzando)
 
 ### License
 
