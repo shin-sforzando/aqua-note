@@ -33,6 +33,21 @@ jobs:
       - name: Run lint check
         run: npm run lint
 
+      - name: Debug - Check Paraglide files
+        run: |
+          echo "=== Checking Paraglide directory structure ==="
+          ls -la src/lib/ || echo "src/lib/ does not exist"
+          ls -la src/lib/paraglide/ || echo "src/lib/paraglide/ does not exist"
+          echo "=== Checking for generated Paraglide files ==="
+          ls -la src/lib/paraglide/runtime.js 2>/dev/null || echo "runtime.js not found"
+          ls -la src/lib/paraglide/server.js 2>/dev/null || echo "server.js not found"
+          echo "=== Checking .svelte-kit directory ==="
+          ls -la .svelte-kit/ || echo ".svelte-kit/ does not exist"
+          echo "=== Running svelte-kit sync manually ==="
+          npx svelte-kit sync
+          echo "=== Re-checking after sync ==="
+          ls -la src/lib/paraglide/ || echo "Still no paraglide directory"
+
       - name: Run type check
         run: npm run check
 
