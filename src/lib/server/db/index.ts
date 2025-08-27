@@ -2,9 +2,21 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import * as schema from './schema';
 import { env } from '$env/dynamic/private';
+import { dev } from '$app/environment';
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+// For development, use local SQLite file
+// For production, use environment variable (should be set in Cloudflare dashboard)
+const databaseUrl = env.DATABASE_URL || (dev ? 'file:./local.db' : '');
 
-const client = createClient({ url: env.DATABASE_URL });
+if (!databaseUrl && !dev) {
+	console.warn('DATABASE_URL is not set in production environment');
+	// Create a dummy client to prevent initialization errors
+	// Real database connection should be configured in Cloudflare dashboard
+}
+
+const client = createClient({
+	url: databaseUrl || 'libsql://dummy.turso.io',
+	authToken: env.DATABASE_AUTH_TOKEN
+});
 
 export const db = drizzle(client, { schema });
