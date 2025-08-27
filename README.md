@@ -44,10 +44,6 @@ Aquarium Management Note on the Web.
 ### Setup
 
 ```bash
-# Clone repository
-git clone https://github.com/shin-sforzando/aqua-note.git
-cd aqua-note
-
 # Install dependencies
 npm install
 
