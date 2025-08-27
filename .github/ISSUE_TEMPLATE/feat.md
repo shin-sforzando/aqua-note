@@ -6,10 +6,38 @@ labels: 'enhancement'
 assignees: 'shin-sforzando'
 ---
 
-## Describe the desired **state** as a goal
+## 概要
 
-(T. B. D.; ex. Automated testing should be completed with just a push.)
+[追加する機能の簡潔な説明]
 
-## Appendix
+## 優先度
 
-(T. B. D.; Add any other context or screenshots about the feature request here.)
+0.5
+
+[優先度設定の理由を記載。0.0〜1.0で設定、デフォルトは0.5]
+
+## 背景・目的
+
+[なぜこの機能が必要なのか、どのような価値を提供するのか]
+
+## 実装内容
+
+- [ ] 実装項目1
+- [ ] 実装項目2
+- [ ] 実装項目3
+
+## 受け入れ条件
+
+- [ ] 機能が正常に動作すること
+- [ ] テストが作成されていること
+- [ ] ドキュメントが更新されていること
+
+## 技術的考慮事項
+
+- 使用する技術・ライブラリ
+- パフォーマンスへの影響
+- 既存機能との互換性
+
+## 関連Issue
+
+- #XXX（もしあれば）

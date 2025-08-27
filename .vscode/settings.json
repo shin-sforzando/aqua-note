@@ -1,14 +1,22 @@
 {
-  "[svelte]": {
-     "editor.defaultFormatter": "svelte.svelte-vscode"
-   },
+	"[markdown]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.markdownlint": "explicit"
+		}
+	},
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
 	"cSpell.words": [
-    "anthropics",
-    "inlang",
-    "libsql",
-    "mdsvex",
-    "oslojs",
-    "paraglide",
-    "vite"
-  ]
+		"anthropics",
+		"gantt",
+		"inlang",
+		"libsql",
+		"mdsvex",
+		"oslojs",
+		"paraglide",
+		"prioritizer",
+		"vite",
+		"WCAG"
+	]
 }
