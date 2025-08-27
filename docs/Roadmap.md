@@ -4,33 +4,39 @@
 
 ```mermaid
 gantt
-    title Aqua Note 開発フェーズ（時期は目安）
-    dateFormat X
-    axisFormat %s
+    title Aqua Note 開発ロードマップ
+    dateFormat YYYY-MM-DD
+    axisFormat %Y/%m
 
-    section Phase 1
-    基盤構築           :done,    p1, 0, 1
-    CI/CDセットアップ   :done,    p1a, 0, 1
+    section Phase 1: 基盤構築
+    CI/CDセットアップ        :active,  p1a, 2025-08-28, 2025-09-05
+    ランディングページ      :         p1b, 2025-09-01, 2025-09-10
+    基盤構築                :         p1,  2025-08-28, 2025-09-15
 
-    section Phase 2
-    認証・基本機能      :active,  p2, 1, 2
-    カレンダービュー    :active,  p2a, 1, 2
+    section Phase 2: コアMVP
+    認証システム            :         p2,  2025-09-10, 2025-09-25
+    カレンダービュー        :         p2a, 2025-09-20, 2025-10-05
+    水槽管理基本機能        :         p2b, 2025-10-01, 2025-10-15
 
-    section Phase 3
-    記録機能実装       :         p3, 3, 2
-    アルファ版         :crit,    milestone, 5, 0
+    section Phase 3: 記録機能
+    メンテナンス記録        :         p3,  2025-10-10, 2025-10-30
+    カレンダー表示          :         p3a, 2025-10-25, 2025-11-10
+    アルファ版リリース      :crit,    milestone, 2025-11-15, 1d
 
-    section Phase 4
-    データ可視化       :         p4, 5, 2
-    ベータ版          :crit,    milestone, 7, 0
+    section Phase 4: データ可視化
+    水質パラメータ記録      :         p4,  2025-11-16, 2025-12-05
+    グラフ表示             :         p4a, 2025-12-01, 2025-12-20
+    ベータ版リリース        :crit,    milestone, 2025-12-31, 1d
 
-    section Phase 5
-    機能拡充          :         p5, 7, 2
-    正式版            :crit,    milestone, 9, 0
+    section Phase 5: 機能拡充
+    生体管理機能           :         p5,  2026-01-01, 2026-01-20
+    データエクスポート      :         p5a, 2026-01-15, 2026-02-10
+    正式版リリース         :crit,    milestone, 2026-02-15, 1d
 
-    section Phase 6
-    有料機能          :         p6, 9, 2
-    Premium版         :crit,    milestone, 11, 0
+    section Phase 6: 有料機能
+    Stripe決済統合         :         p6,  2026-02-16, 2026-03-10
+    複数水槽管理           :         p6a, 2026-03-01, 2026-03-31
+    Premium版リリース      :crit,    milestone, 2026-04-01, 1d
 ```
 
 ## 機能比較マトリックス
@@ -116,4 +122,4 @@ flowchart LR
 
 ---
 
-_このロードマップは開発の進捗に応じて更新されます。最終更新: 2025年8月_
+_このロードマップは開発の進捗に応じて更新されます。最終更新: 2025年8月27日_
