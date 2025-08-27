@@ -40,6 +40,9 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+      - name: Run E2E tests
+        run: npm run test:e2e
+
   deploy:
     name: Deploy to Cloudflare Workers
     needs: test
