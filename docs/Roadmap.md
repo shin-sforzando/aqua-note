@@ -1,5 +1,7 @@
 # 🐠 Aqua Note Development Roadmap
 
+最終更新: 2025年8月27日
+
 ## 開発フェーズ
 
 ```mermaid
@@ -71,7 +73,7 @@ flowchart LR
 
 ### 📍 Phase 1: 基盤構築
 
-- ✅ CI/CDパイプライン（GitHub Actions → Cloudflare Pages）
+- ✅ CI/CDパイプライン（GitHub Actions → Cloudflare Workers）
 - ✅ Coming Soonページ公開
 - ✅ ランディングページ（水中の泡アニメーション）
 - ✅ SEO基盤（OGP、sitemap.xml、構造化データ）
@@ -119,7 +121,3 @@ flowchart LR
 - 📢 **進捗報告**: LPに記載
 - 🐛 **バグ報告**: GitHub Issues
 - 💡 **機能要望**: GitHub Discussions
-
----
-
-_このロードマップは開発の進捗に応じて更新されます。最終更新: 2025年8月27日_

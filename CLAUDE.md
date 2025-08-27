@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケーションです。熱帯魚などの飼育における水換えや給餌などのメンテナンス作業を簡単に記録・管理できるツールです。SvelteKit v5を基盤として、最新のWeb技術スタックで構築されています。
+Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケーションです。
+熱帯魚などの飼育における水換えや給餌などのメンテナンス作業を簡単に記録・管理できるツールです。
+SvelteKit v5を基盤として、最新のWeb技術スタックで構築されています。
 
-**現在の開発状況**: `sv create`で作成した初期状態。具体的な実装はこれから行う。
+**現在の開発状況**: `sv create` で作成した初期状態。具体的な実装はこれから行う。
 
 ## 開発ガイドライン
 
@@ -98,7 +100,7 @@ npm run build-storybook  # Storybookビルド
   - ユニットテスト: Vitest（ブラウザ環境とNode環境を分離）
   - E2Eテスト: Playwright
 - **Markdown**: MDsveX（ `.svx` ファイルサポート）
-- **デプロイ**: Cloudflare Pages/Workers（予定）
+- **デプロイ**: Cloudflare Workers
 
 ### 重要な設定ファイル
 
@@ -147,4 +149,4 @@ Vitestは2つのプロジェクトで構成:
 - [LayerChart](https://www.layerchart.com)
 - [Cloudflare D1](https://developers.cloudflare.com/d1/)
 - [Cloudflare R2](https://developers.cloudflare.com/r2/)
-- [Cloudflare Pages](https://developers.cloudflare.com/pages/)
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/)
