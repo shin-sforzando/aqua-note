@@ -1,4 +1,4 @@
-# D1 Migration Complete (Issue #29)
+# D1 Migration
 
 ## 実装完了日
 

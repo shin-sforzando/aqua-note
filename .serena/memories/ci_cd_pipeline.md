@@ -1,4 +1,4 @@
-# CI/CD Pipeline Implementation Details
+# CI/CD Pipeline
 
 ## 実装内容
 
