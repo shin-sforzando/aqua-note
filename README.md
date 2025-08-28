@@ -3,6 +3,9 @@
 <!-- Badges -->
 
 [![Last Commit](https://img.shields.io/github/last-commit/shin-sforzando/aqua-note)](https://github.com/shin-sforzando/aqua-note/graphs/commit-activity)
+[![CI](https://github.com/shin-sforzando/aqua-note/actions/workflows/ci.yml/badge.svg)](https://github.com/shin-sforzando/aqua-note/actions/workflows/ci.yml)
+[![Deploy to Production](https://github.com/shin-sforzando/aqua-note/actions/workflows/deploy.yml/badge.svg)](https://github.com/shin-sforzando/aqua-note/actions/workflows/deploy.yml)
+[![Claude Maintenance Check](https://github.com/shin-sforzando/aqua-note/actions/workflows/claude-maintenance-check.yml/badge.svg)](https://github.com/shin-sforzando/aqua-note/actions/workflows/claude-maintenance-check.yml)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
