@@ -25,6 +25,7 @@
 		"languagetool",
 		"libsql",
 		"luacheck",
+		"markuplint",
 		"mdsvex",
 		"mermaidchart",
 		"oslojs",

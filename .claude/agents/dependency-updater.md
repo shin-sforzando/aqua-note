@@ -43,7 +43,7 @@ npx npm-check-updates
 
 ### 3. 情報収集チェックリスト
 
-各パッケージについて以下を確認：
+各パッケージについて以下を確認:
 
 1. **変更履歴の確認**
    - GitHubリリースノート
@@ -65,7 +65,7 @@ npx npm-check-updates
    - テストへの影響
    - ビルドプロセスへの影響
 
-### 5. 更新戦略
+### 4. 更新戦略
 
 #### 段階的更新アプローチ
 
@@ -99,9 +99,9 @@ npx npm-check-updates -u svelte sveltekit vite
 npx npm-check-updates -u "/^@sveltejs/"
 ```
 
-### 6. 検証プロセス
+### 5. 検証プロセス
 
-更新後の検証：
+更新後の検証:
 
 ```bash
 # 依存関係の整合性確認

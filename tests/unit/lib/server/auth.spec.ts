@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { generateSessionToken, createSession, validateSessionToken } from './auth';
+import { generateSessionToken, createSession, validateSessionToken } from '$lib/server/auth';
 import type { D1Database } from '@cloudflare/workers-types';
 
 describe('Authentication with D1', () => {
@@ -37,7 +37,7 @@ describe('Authentication with D1', () => {
 			const token = generateSessionToken();
 
 			// Mock the getDb function to avoid actual DB calls in unit tests
-			vi.mock('./db', () => ({
+			vi.mock('$lib/server/db', () => ({
 				getDb: vi.fn(() => ({
 					insert: vi.fn().mockReturnValue({
 						values: vi.fn().mockResolvedValue(undefined)

@@ -1,1 +1,14 @@
 @import 'tailwindcss';
+
+/* グローバルフォント設定 */
+body {
+	font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+/* 等幅フォント・技術的要素用 */
+code,
+pre,
+.monospace,
+.font-mono {
+	font-family: 'M PLUS 1 Code', monospace;
+}

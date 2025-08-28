@@ -18,11 +18,18 @@ enabled = true
 [placement]
 mode = "smart"
 
+# D1 Database Configuration for local development
+[[d1_databases]]
+binding = "aqua_note_db"
+database_name = "aqua-note-db"
+database_id = "a7f03bf7-852c-444a-8505-33f1a4edae52"
+migrations_dir = "drizzle"
+
 [env.production]
 name = "aqua-note"
 
-# D1 Database Configuration
-[[d1_databases]]
+# Production D1 Database Configuration
+[[env.production.d1_databases]]
 binding = "aqua_note_db"
 database_name = "aqua-note-db"
 database_id = "a7f03bf7-852c-444a-8505-33f1a4edae52"
