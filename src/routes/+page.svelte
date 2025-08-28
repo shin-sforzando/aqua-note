@@ -45,7 +45,7 @@
 		<!-- Coming Soon カード -->
 		<div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12">
 			<span
-				class="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-semibold mb-6"
+				class="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-semibold mb-6 font-mono"
 			>
 				COMING SOON
 			</span>
@@ -68,6 +68,7 @@
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mb-8">
 				<div class="flex items-start space-x-3">
 					<svg
+						aria-hidden="true"
 						class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
 						fill="none"
 						stroke="currentColor"
@@ -88,6 +89,7 @@
 
 				<div class="flex items-start space-x-3">
 					<svg
+						aria-hidden="true"
 						class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
 						fill="none"
 						stroke="currentColor"
@@ -108,6 +110,7 @@
 
 				<div class="flex items-start space-x-3">
 					<svg
+						aria-hidden="true"
 						class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
 						fill="none"
 						stroke="currentColor"
@@ -132,9 +135,9 @@
 				<div class="border border-gray-200 rounded-lg p-4">
 					<h4 class="font-semibold text-gray-800 mb-2">無料プラン</h4>
 					<ul class="text-sm text-gray-600 space-y-1">
-						<li>・ 基本的な水槽管理</li>
-						<li>・ メンテナンス記録</li>
-						<li>・ シンプルなデータ表示</li>
+						<li>基本的な水槽管理</li>
+						<li>メンテナンス記録</li>
+						<li>シンプルなデータ表示</li>
 					</ul>
 				</div>
 				<div class="border border-blue-300 rounded-lg p-4 bg-blue-50">
@@ -143,9 +146,9 @@
 						<span class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full ml-2">予定</span>
 					</h4>
 					<ul class="text-sm text-gray-600 space-y-1">
-						<li>・ 複数の水槽管理</li>
-						<li>・ リマインダー・通知</li>
-						<li>・ 高度なアルバム機能</li>
+						<li>複数の水槽管理</li>
+						<li>リマインダー・通知</li>
+						<li>高度なアルバム機能</li>
 					</ul>
 				</div>
 			</div>

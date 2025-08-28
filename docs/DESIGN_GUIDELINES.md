@@ -80,9 +80,35 @@ Tailwind CSS、Svelte-UX、LayerChartを効果的に組み合わせて使用す�
 
 ### フォントファミリー
 
-- 見出し: システムフォント（日本語優先）
-- 本文: システムフォント
-- コード: 等幅フォント
+- 見出し: M PLUS Rounded 1c（Google Fonts）
+- 本文: M PLUS Rounded 1c（Google Fonts）
+- コード・技術的要素: M PLUS 1 Code（Google Fonts）
+
+M PLUS Rounded 1cは丸みを帯びた親しみやすいフォントで、水をテーマにしたAqua Noteの柔らかく優しいイメージを演出します。
+M PLUS 1 Codeは同じM PLUSファミリーの等幅フォントで、デザインの統一感を保ちながらコードや技術的な要素を明確に表現します。
+
+### フォントの読み込み
+
+```html
+<!-- app.htmlのheadタグ内 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700;800;900&family=M+PLUS+1+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+```
+
+### CSS設定
+
+```css
+/* app.cssまたはグローバルスタイル */
+body {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+/* コード・技術的要素用 */
+code, pre, .monospace, .font-mono {
+  font-family: 'M PLUS 1 Code', monospace;
+}
+```
 
 ### サイズスケール
 

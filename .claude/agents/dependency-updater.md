@@ -65,7 +65,7 @@ npx npm-check-updates
    - テストへの影響
    - ビルドプロセスへの影響
 
-### 5. 更新戦略
+### 4. 更新戦略
 
 #### 段階的更新アプローチ
 
@@ -99,7 +99,7 @@ npx npm-check-updates -u svelte sveltekit vite
 npx npm-check-updates -u "/^@sveltejs/"
 ```
 
-### 6. 検証プロセス
+### 5. 検証プロセス
 
 更新後の検証:
 
