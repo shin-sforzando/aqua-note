@@ -40,8 +40,7 @@ aqua-note/
 │   └── unit/         # ユニットテスト（Vitest）
 ├── docs/             # プロジェクトドキュメント
 │   ├── DESIGN_GUIDELINES.md # デザインガイドライン
-│   ├── D1_MIGRATION.md      # D1マイグレーションガイド
-│   └── Roadmap.md          # 開発ロードマップ
+│   └── D1_MIGRATION.md      # D1マイグレーションガイド
 ├── .storybook/       # Storybook設定
 ├── static/           # 静的ファイル
 ├── messages/         # 国際化メッセージ
