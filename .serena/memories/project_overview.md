@@ -2,19 +2,24 @@
 
 ## プロジェクトの目的
 
-Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケーションです。熱帯魚などの飼育における水換えや給餌などのメンテナンス作業を簡単に記録・管理できるツールです。
+Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケーションです。
+熱帯魚などの飼育における水換えや給餌などのメンテナンス作業を簡単に記録・管理できるツールです。
 
-## 現在の開発状況
+## 現在の開発状況（2025年8月）
 
-- `sv create`で作成した初期状態
-- 具体的な実装はこれから行う予定
+- Issue #4完了：初回デプロイとテスト環境の準備
+- Coming Soonページが稼働中
+- UIは仮実装（単一ファイル `/src/routes/+page.svelte` に統合）
+- Issue #10でSvelte-UXを正式導入予定
 
 ## 主な機能（実装予定）
 
 - 水槽情報管理
-- 生体情報管理
-- メンテナンス記録（水換え、給餌、清掃等）
+- 生体情報管理  
+- メンテナンス記録（水換え、給餌、添加剤等）
 - 水質パラメータ記録
+- 無料プラン：基本機能
+- 有料プラン（予定）：複数水槽管理、リマインダー、高度なアルバム機能
 
 ## プロジェクト構造
 
@@ -22,17 +27,36 @@ Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケー�
 aqua-note/
 ├── src/
 │   ├── routes/         # SvelteKitのページとルーティング
-│   ├── lib/           # 共通ライブラリとコンポーネント
+│   │   └── +page.svelte # Coming Soonページ（現在の仮実装）
+│   ├── lib/           # 共通ライブラリ
 │   │   ├── server/    # サーバーサイドコード
 │   │   │   ├── db/    # データベース関連（Drizzle ORM）
 │   │   │   └── auth.ts # 認証ロジック（Lucia Auth）
+│   │   ├── paraglide/ # 国際化（i18n）
 │   │   └── assets/    # 静的アセット
-│   └── stories/       # Storybookコンポーネント
-├── .storybook/        # Storybook設定
-├── e2e/              # E2Eテスト
+│   └── stories/       # Storybookコンポーネント（デモ用）
+├── tests/            # 全テストを統合
+│   ├── e2e/          # E2Eテスト（Playwright）
+│   └── unit/         # ユニットテスト（Vitest）
+├── docs/             # プロジェクトドキュメント
+│   ├── DESIGN_GUIDELINES.md # デザインガイドライン
+│   ├── D1_MIGRATION.md      # D1マイグレーションガイド
+│   └── Roadmap.md          # 開発ロードマップ
+├── .storybook/       # Storybook設定
 ├── static/           # 静的ファイル
-└── messages/         # 国際化メッセージ
+├── messages/         # 国際化メッセージ
+└── drizzle/          # データベースマイグレーション
 ```
+
+## 技術スタック
+
+- **フレームワーク**: SvelteKit v5 + Svelte v5
+- **スタイリング**: Tailwind CSS v4
+- **データベース**: Cloudflare D1
+- **認証**: Lucia Auth
+- **国際化**: Paraglide
+- **テスト**: Vitest（ユニット）、Playwright（E2E）
+- **デプロイ**: Cloudflare Workers
 
 ## 開発ガイドライン
 
@@ -43,3 +67,13 @@ aqua-note/
   - 例: Issue #19の場合は `019_prepare_github_actions`
 - mainブランチで直接作業することは厳禁
 - 既存の実装パターンを必ず確認してから新機能を追加
+- YAGNI原則に従い、必要になるまで実装を遅らせる
+
+## 重要な設定ファイル
+
+- `svelte.config.js` - SvelteKit設定（MDsveX、アダプター）
+- `vite.config.ts` - Vite設定（Tailwind、Paraglide、テスト設定）
+- `drizzle.config.ts` - データベーススキーマ設定
+- `tsconfig.json` - TypeScript設定（strict mode有効）
+- `playwright.config.ts` - E2Eテスト設定
+- `wrangler.toml` - Cloudflare Workers設定

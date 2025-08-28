@@ -7,5 +7,5 @@ export default defineConfig({
 		reuseExistingServer: !process.env.CI,
 		timeout: 180 * 1000 // 3 minutes timeout for server startup
 	},
-	testDir: 'e2e'
+	testDir: 'tests/e2e'
 });

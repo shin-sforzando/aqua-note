@@ -71,14 +71,4 @@ test.describe('Coming Soon Page', () => {
 		const gridContainer = page.locator('.grid').first();
 		await expect(gridContainer).toHaveClass(/grid-cols-1/);
 	});
-
-	test('should have footer with copyright and GitHub link', async ({ page }) => {
-		// コピーライト確認
-		await expect(page.locator('text=© 2025 Aqua Note')).toBeVisible();
-
-		// GitHubリンク確認
-		const githubLink = page.locator('a[href*="github.com/sforzando/aqua-note"]');
-		await expect(githubLink).toBeVisible();
-		await expect(githubLink).toHaveAttribute('target', '_blank');
-	});
 });

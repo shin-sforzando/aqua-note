@@ -1,5 +1,6 @@
 <script lang="ts">
-	// Coming Soon ページ
+	// Coming Soon ページ - 仮実装
+	// 将来的にSvelte-UXを導入時にコンポーネント化予定
 </script>
 
 <svelte:head>
@@ -31,20 +32,9 @@
 	<div class="text-center max-w-4xl mx-auto">
 		<!-- ロゴエリア -->
 		<div class="mb-8">
-			<div
-				class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 shadow-xl mb-4"
-			>
-				<svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-					/>
-				</svg>
-			</div>
+			<img src="/logo.svg" alt="Aqua Note Logo" class="w-32 h-32 mx-auto mb-4" />
 			<h1
-				class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-4"
+				class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-4"
 			>
 				Aqua Note
 			</h1>
