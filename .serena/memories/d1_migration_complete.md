@@ -10,7 +10,7 @@
 
 - SQLite/libsqlからCloudflare D1へ完全移行
 - プラットフォームベースのアーキテクチャ採用
-- 環境変数DATABASE_URLは不要に
+- 環境変数 `DATABASE_URL` は不要に
 
 ### 開発環境
 

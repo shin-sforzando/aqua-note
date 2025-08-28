@@ -31,10 +31,10 @@ SQLite/libsqlからCloudflare D1への移行が正常に完了しました。
 ```typescript
 // src/lib/server/db/index.ts
 export function getDb(platform: App.Platform) {
-	if (!platform?.env?.aqua_note_db) {
-		throw new Error('D1 database binding not found');
-	}
-	return drizzle(platform.env.aqua_note_db, { schema });
+ if (!platform?.env?.aqua_note_db) {
+  throw new Error('D1 database binding not found');
+ }
+ return drizzle(platform.env.aqua_note_db, { schema });
 }
 ```
 
@@ -173,16 +173,6 @@ GitHub ActionsワークフローはすでにD1で動作するよう設定済み:
 3. **組み込みバックアップ**とポイントインタイムリカバリ
 4. **コネクションプーリング不要**
 5. **Cloudflare Workersとのシームレスな統合**
-
-## 移行のロールバック
-
-必要に応じて、以前のSQLite/libsql実装を復元できます:
-
-1. gitコミットのリバート
-2. `DATABASE_URL` 環境変数の復元
-3. `wrangler.toml` からD1バインディングを削除
-
-ただし、D1は優れたパフォーマンスと統合を提供するため、これは推奨されません。
 
 ## リソース
 

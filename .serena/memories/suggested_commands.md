@@ -48,8 +48,6 @@ npm run db:migrate  # マイグレーション実行
 npm run db:studio   # Drizzle Studio起動（DBをGUIで確認）
 ```
 
-**注意**: 環境変数 `DATABASE_URL` の設定が必要（例: `DATABASE_URL=file:local.db`）
-
 ## UI開発
 
 ### Storybook
