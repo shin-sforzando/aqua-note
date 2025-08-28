@@ -1,22 +1,20 @@
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/d1';
 import * as schema from './schema';
-import { env } from '$env/dynamic/private';
-import { dev } from '$app/environment';
+import type { D1Database } from '@cloudflare/workers-types';
 
-// For development, use local SQLite file
-// For production, use environment variable (should be set in Cloudflare dashboard)
-const databaseUrl = env.DATABASE_URL || (dev ? 'file:./local.db' : '');
+/**
+ * Get database instance from platform
+ * Works with both local development (wrangler dev) and production
+ */
+export function getDb(platform: App.Platform) {
+	if (!platform?.env?.aqua_note_db) {
+		throw new Error(
+			'D1 database binding not found. Make sure to run with wrangler dev or deploy to Cloudflare.'
+		);
+	}
 
-if (!databaseUrl && !dev) {
-	console.warn('DATABASE_URL is not set in production environment');
-	// Create a dummy client to prevent initialization errors
-	// Real database connection should be configured in Cloudflare dashboard
+	return drizzle(platform.env.aqua_note_db as D1Database, { schema });
 }
 
-const client = createClient({
-	url: databaseUrl || 'libsql://dummy.turso.io',
-	authToken: env.DATABASE_AUTH_TOKEN
-});
-
-export const db = drizzle(client, { schema });
+// Export schema for convenience
+export { schema };

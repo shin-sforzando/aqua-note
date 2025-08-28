@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
 
 env:
-  DATABASE_URL: file:./test.db
   NODE_VERSION: '24'
   HUSKY: 0 # Disable Husky in CI environment
 
@@ -18,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node environment
         uses: ./.github/actions/setup-node-env
@@ -57,7 +56,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node environment
         uses: ./.github/actions/setup-node-env

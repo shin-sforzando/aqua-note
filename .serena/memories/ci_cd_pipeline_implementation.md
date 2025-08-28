@@ -13,8 +13,9 @@
 1. **Node.js Version**: v24を使用（次期LTS）
 
 2. **Cloudflare Workers選択理由**:
-   - 当初はCloudflare Pagesを想定
+   - 当初はCloudflare Pagesを想定していたが、2025年現在非推奨
    - Workersの方がエッジコンピューティングに適している
+     - cf. <https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/#compatibility-matrix>
    - D1データベースとの統合が容易
 
 3. **Paraglide問題の解決**:

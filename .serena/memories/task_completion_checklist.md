@@ -90,9 +90,6 @@ npm install
 ### データベース関連エラー時
 
 ```bash
-# DATABASE_URL環境変数の確認
-echo $DATABASE_URL
-
 # DBファイルの権限確認
 ls -la local.db
 ```
