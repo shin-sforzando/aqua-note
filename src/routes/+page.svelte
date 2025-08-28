@@ -15,6 +15,7 @@
 		content="アクアリウム愛好家のための水槽管理アプリ。まもなく公開予定。"
 	/>
 	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Aqua Note" />
 	<meta property="og:url" content="https://aqua-note.app" />
 	<meta property="og:image" content="https://aqua-note.app/og-image.png" />
 	<meta name="twitter:card" content="summary_large_image" />
