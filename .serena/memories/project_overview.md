@@ -7,46 +7,98 @@ Aqua Note は水槽管理（アクアリウム管理）用のWebアプリケー�
 
 ## 主な機能（実装予定）
 
-- 水槽情報管理
-- 生体情報管理  
-- メンテナンス記録（水換え、給餌、添加剤等）
-- 水質パラメータ記録
-- 無料プラン: 基本機能
-- 有料プラン: 複数水槽管理、リマインダー、高度なアルバム機能
+### 基本機能
 
-## プロジェクト構造
+- **ユーザー管理**: 認証、プロフィール、設定管理
+- **水槽管理**: 複数水槽の登録・管理、仕様記録
+- **生体管理**: 水槽内生体の記録・追跡
+- **メンテナンス記録**: 水換え、給餌、添加剤投入の記録
+- **水質管理**: 各種水質パラメータの測定・記録
+- **観察記録**: 日々の観察内容の記録
+- **写真管理**: 水槽・生体・記録の写真保存
+
+### 有料機能
+
+- **複数水槽管理**: 無制限の水槽登録
+- **高度なリマインダー**: メンテナンススケジュール管理
+- **詳細レポート**: 水質トレンド分析
+- **公開機能**: 水槽の一般公開・共有
+- **バックアップ**: データ自動バックアップ
+
+## プロジェクト構造（最新版）
 
 ```plain
 aqua-note/
-├── src/
-│   ├── routes/         # SvelteKitのページとルーティング
-│   │   └── +page.svelte # Coming Soonページ（現在の仮実装）
-│   ├── lib/           # 共通ライブラリ
-│   │   ├── server/    # サーバーサイドコード
-│   │   │   ├── db/    # データベース関連（Drizzle ORM）
-│   │   │   └── auth.ts # 認証ロジック（Lucia Auth）
-│   │   ├── paraglide/ # 国際化（i18n）
-│   │   └── assets/    # 静的アセット
-│   └── stories/       # Storybookコンポーネント（デモ用）
-├── tests/            # 全テストを統合
-│   ├── e2e/          # E2Eテスト（Playwright）
-│   └── unit/         # ユニットテスト（Vitest）
-├── docs/             # プロジェクトドキュメント
-│   ├── DESIGN_GUIDELINES.md # デザインガイドライン
-│   └── D1_MIGRATION.md      # D1マイグレーションガイド
-├── .storybook/       # Storybook設定
-├── static/           # 静的ファイル
-├── messages/         # 国際化メッセージ
-└── drizzle/          # データベースマイグレーション
+├── src/                           # アプリケーションソース
+│   ├── routes/                    # SvelteKitルーティング
+│   │   ├── +page.svelte          # ホームページ（Coming Soon）
+│   │   ├── +layout.svelte        # レイアウト
+│   │   └── test-d1/              # D1接続テストページ
+│   ├── lib/                      # 共通ライブラリ
+│   │   ├── server/               # サーバーサイドコード
+│   │   │   ├── db/               # データベース層
+│   │   │   │   ├── schema.ts     # 完全なデータベーススキーマ
+│   │   │   │   └── index.ts      # DB接続設定
+│   │   │   └── auth.ts           # 認証ロジック（Lucia Auth）
+│   │   ├── components/           # Svelteコンポーネント
+│   │   └── assets/               # 静的アセット
+│   ├── stories/                  # Storybook用コンポーネント
+│   │   ├── *.svelte             # デモコンポーネント
+│   │   ├── *.stories.svelte     # ストーリー
+│   │   └── assets/              # Storybook用アセット
+│   ├── app.html                 # HTMLテンプレート
+│   ├── app.css                  # グローバルCSS
+│   ├── hooks.server.ts          # サーバーフック
+│   ├── hooks.ts                 # クライアントフック
+│   └── worker-configuration.d.ts # Cloudflare Workers型定義
+├── tests/                        # テストファイル
+│   ├── unit/                     # ユニットテスト（Vitest）
+│   │   ├── components/           # コンポーネントテスト
+│   │   ├── lib/server/           # サーバーロジックテスト
+│   │   └── routes/               # ルートテスト
+│   └── e2e/                      # E2Eテスト（Playwright）
+│       ├── d1-connection.test.ts # D1接続テスト
+│       └── coming-soon.spec.ts   # UI E2Eテスト
+├── docs/                         # プロジェクトドキュメント
+│   ├── D1_MIGRATION.md          # D1マイグレーションガイド
+│   ├── DESIGN_GUIDELINES.md     # デザインガイドライン
+│   └── ERD.md                   # ER図
+├── drizzle/                      # データベースマイグレーション
+│   ├── 0000_initial_complete_schema_text_unified.sql
+│   └── meta/                     # マイグレーションメタデータ
+├── scripts/                      # ユーティリティスクリプト
+│   └── reset-db.sql             # DB初期化スクリプト
+├── messages/                     # 国際化メッセージ
+│   ├── ja.json                  # 日本語
+│   └── en.json                  # 英語
+├── static/                       # 静的ファイル
+│   ├── favicon/                 # ファビコン各種
+│   ├── logo.svg                 # ロゴ
+│   └── robots.txt               # SEO設定
+├── .storybook/                   # Storybook設定
+├── .github/                      # GitHub設定
+│   ├── workflows/               # GitHub Actions
+│   ├── actions/                 # カスタムアクション
+│   └── ISSUE_TEMPLATE/          # Issueテンプレート
+├── .serena/                      # Serena MCP設定
+│   ├── memories/                # プロジェクト記憶
+│   └── cache/                   # キャッシュ
+├── .claude/                      # Claude Code設定
+│   ├── agents/                  # 専用エージェント
+│   └── settings.local.json      # ローカル設定
+├── .vscode/                      # VSCode設定
+└── project.inlang/               # Paraglide国際化設定
 ```
 
 ## 技術スタック
 
 - **フレームワーク**: SvelteKit v5 + Svelte v5
 - **スタイリング**: Tailwind CSS v4
-- **データベース**: Cloudflare D1
+- **データベース**: Cloudflare D1（完全実装済み）
+- **ORM**: Drizzle ORM（完全スキーマ実装済み）
 - **認証**: Lucia Auth
-- **国際化**: Paraglide
+- **決済**: Stripe統合（スキーマ実装済み）
+- **国際化**: Paraglide（日本語・英語対応）
 - **テスト**: Vitest（ユニット）、Playwright（E2E）
 - **デプロイ**: Cloudflare Workers
 
@@ -69,3 +121,11 @@ aqua-note/
 - `tsconfig.json` - TypeScript設定（strict mode有効）
 - `playwright.config.ts` - E2Eテスト設定
 - `wrangler.toml` - Cloudflare Workers設定
+
+## 次の開発ステップ
+
+1. **認証機能の実装**: ユーザー登録・ログイン機能
+2. **基本UI実装**: ダッシュボード、水槽一覧画面
+3. **CRUD機能実装**: 水槽・生体・記録の基本操作
+4. **Stripe統合**: サブスクリプション機能
+5. **高度な機能**: リマインダー、レポート、公開機能

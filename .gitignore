@@ -146,3 +146,6 @@ $RECYCLE.BIN/
 
 # Playwright MCP generated files (screenshots, etc.)
 .playwright-mcp/
+
+# Serena MCP cache files
+.serena/cache/
