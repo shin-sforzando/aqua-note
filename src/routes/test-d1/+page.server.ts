@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 		const db = getDb(platform);
 
 		// Test query to check D1 connection - count users
-		await db.select({ count: table.user.id }).from(table.user).limit(1);
+		await db.select({ count: table.users.id }).from(table.users).limit(1);
 
 		return {
 			d1Status: 'connected',
