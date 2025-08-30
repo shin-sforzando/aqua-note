@@ -1,4 +1,12 @@
-import { sqliteTable, integer, text, real, index, primaryKey } from 'drizzle-orm/sqlite-core';
+import {
+	sqliteTable,
+	integer,
+	text,
+	real,
+	index,
+	primaryKey,
+	unique
+} from 'drizzle-orm/sqlite-core';
 
 // ============================================
 // 認証・決済システム
@@ -61,7 +69,8 @@ export const oauthAccounts = sqliteTable(
 		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
-		userIdIdx: index('idx_oauth_accounts_user_id').on(table.userId)
+		userIdIdx: index('idx_oauth_accounts_user_id').on(table.userId),
+		providerUserUnique: unique().on(table.provider, table.providerUserId)
 	})
 );
 
@@ -112,7 +121,7 @@ export const paymentHistories = sqliteTable(
 		currency: text('currency').default('jpy'),
 		status: text('status').notNull(), // succeeded/failed/pending
 		description: text('description'),
-		paidAt: integer('paid_at'),
+		paidAt: text('paid_at'),
 		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
@@ -132,7 +141,7 @@ export const stripeWebhookEvents = sqliteTable(
 		errorMessage: text('error_message'),
 		payload: text('payload', { mode: 'json' }).notNull(),
 		createdAt: text('created_at').notNull(),
-		processedAt: integer('processed_at')
+		processedAt: text('processed_at')
 	},
 	(table) => ({
 		stripeEventIdIdx: index('idx_stripe_webhook_events_stripe_event_id').on(table.stripeEventId),
@@ -151,7 +160,7 @@ export const multiFactorAuth = sqliteTable(
 		type: text('type').notNull(), // totp/sms/backup_codes
 		secret: text('secret'), // 暗号化必須
 		verified: integer('verified', { mode: 'boolean' }).default(false),
-		lastUsedAt: integer('last_used_at'),
+		lastUsedAt: text('last_used_at'),
 		createdAt: text('created_at').notNull(),
 		updatedAt: text('updated_at').notNull()
 	},
@@ -259,7 +268,7 @@ export const aquariums = sqliteTable(
 		isActive: integer('is_active', { mode: 'boolean' }).default(true),
 		isPublic: integer('is_public', { mode: 'boolean' }).default(false),
 		viewCount: integer('view_count').default(0),
-		publishedAt: integer('published_at'),
+		publishedAt: text('published_at'),
 		photoUrl: text('photo_url'),
 		createdAt: text('created_at').notNull(),
 		updatedAt: text('updated_at').notNull()
@@ -359,7 +368,7 @@ export const maintenanceRecords = sqliteTable(
 		aquariumId: text('aquarium_id')
 			.notNull()
 			.references(() => aquariums.id),
-		performedAt: integer('performed_at').notNull(),
+		performedAt: text('performed_at').notNull(),
 		category: text('category').notNull(), // water_change/feeding/additives/cleaning/observation/other
 		title: text('title'),
 		description: text('description'),
@@ -470,7 +479,7 @@ export const waterParameters = sqliteTable(
 		aquariumId: text('aquarium_id')
 			.notNull()
 			.references(() => aquariums.id),
-		measuredAt: integer('measured_at').notNull(),
+		measuredAt: text('measured_at').notNull(),
 		temperatureC: real('temperature_c'),
 		ph: real('ph'),
 		ammoniaPpm: real('ammonia_ppm'),
@@ -570,9 +579,9 @@ export const notifications = sqliteTable(
 		title: text('title').notNull(),
 		message: text('message').notNull(),
 		status: text('status'), // pending/sent/read/cancelled
-		scheduledFor: integer('scheduled_for'),
-		sentAt: integer('sent_at'),
-		readAt: integer('read_at'),
+		scheduledFor: text('scheduled_for'),
+		sentAt: text('sent_at'),
+		readAt: text('read_at'),
 		createdAt: text('created_at').notNull()
 	},
 	(table) => ({

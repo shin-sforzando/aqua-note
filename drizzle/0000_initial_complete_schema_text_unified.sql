@@ -247,6 +247,8 @@ CREATE TABLE `oauth_accounts` (
 --> statement-breakpoint
 CREATE INDEX `idx_oauth_accounts_user_id` ON `oauth_accounts` (`user_id`);
 --> statement-breakpoint
+CREATE UNIQUE INDEX `oauth_accounts_provider_user_unique` ON `oauth_accounts` (`provider`, `provider_user_id`);
+--> statement-breakpoint
 CREATE TABLE `observation_records` (
   `id` text PRIMARY KEY NOT NULL,
   `maintenance_record_id` text NOT NULL,

@@ -56,6 +56,33 @@ const newId = ulid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAV"
 const text = decodeTime(newId); // ミリ秒単位のUnixタイムスタンプ
 ```
 
+## 日付・時刻の統一設計
+
+全ての日付・時刻フィールドをTEXT型（ISO 8601形式）で統一:
+
+```sql
+-- 日付のみ: "2024-01-15"
+setup_date TEXT
+
+-- 日時: "2024-01-15T10:30:00.000Z"
+created_at TEXT
+performed_at TEXT
+```
+
+SQLiteの強力な日付関数を活用:
+
+```sql
+-- 今日の作業
+WHERE date(performed_at) = date('now')
+
+-- 先週の記録  
+WHERE performed_at >= date('now', '-7 days')
+
+-- 月別集計
+SELECT strftime('%Y-%m', performed_at) as month, count(*)
+FROM maintenance_records GROUP BY month
+```
+
 ## ER図
 
 ### 1. 認証・決済システム
@@ -294,7 +321,7 @@ erDiagram
         string common_name
         string livestock_type "fish/shrimp/snail/coral/plant/other"
         integer quantity "default: 1"
-        text added_text "not null"
+        text added_date "not null"
         text removed_date
         string removal_reason
         string notes
@@ -399,7 +426,7 @@ erDiagram
         integer interval_days "not null"
         time preferred_time
         text last_performed_date
-        text next_due_text "not null"
+        text next_due_date "not null"
         boolean is_active "default: true"
         boolean notification_enabled "default: true"
         integer notification_hours_before "default: 24"
@@ -420,59 +447,6 @@ erDiagram
         text read_at
         text created_at "not null"
     }
-```
-
-## パフォーマンス最適化
-
-### 部分インデックス（条件付きインデックス）
-
-実際の使用パターンに基づいて、条件付きインデックスを設定し、パフォーマンスを最適化:
-
-```sql
--- アクティブ水槽のユーザー検索（最も頻繁）
-CREATE INDEX idx_aquariums_active_user ON aquariums(user_id) WHERE is_active = 1;
-
--- 公開水槽の公開日順（コミュニティ機能）
-CREATE INDEX idx_aquariums_public_published ON aquariums(published_at) WHERE is_public = 1;
-
--- 直近3ヶ月のメンテナンス履歴（よく参照される）
-CREATE INDEX idx_maintenance_recent ON maintenance_records(performed_at) 
-WHERE performed_at > datetime('now', '-3 months');
-
--- アクティブスケジュールの期限管理（通知機能）
-CREATE INDEX idx_schedules_active_due ON maintenance_schedules(next_due_date) 
-WHERE is_active = 1 AND notification_enabled = 1;
-
--- 未読通知の予定日（通知システム）
-CREATE INDEX idx_notifications_unread ON notifications(scheduled_for) 
-WHERE status = 'pending';
-```
-
-### 日付・時刻の統一設計
-
-全ての日付・時刻フィールドをTEXT型（ISO 8601形式）で統一:
-
-```sql
--- 日付のみ: "2024-01-15"
-setup_date TEXT
-
--- 日時: "2024-01-15T10:30:00.000Z"
-created_at TEXT
-performed_at TEXT
-```
-
-SQLiteの強力な日付関数を活用:
-
-```sql
--- 今日の作業
-WHERE date(performed_at) = date('now')
-
--- 先週の記録  
-WHERE performed_at >= date('now', '-7 days')
-
--- 月別集計
-SELECT strftime('%Y-%m', performed_at) as month, count(*)
-FROM maintenance_records GROUP BY month
 ```
 
 ## テーブル詳細設計
@@ -542,7 +516,6 @@ FROM maintenance_records GROUP BY month
 **インデックス**:
 
 - `idx_oauth_accounts_user_id` (user_id)
-- `idx_oauth_accounts_provider_unique` (provider, provider_user_id) - UNIQUE
 
 #### 4. subscriptions（サブスクリプション）
 
@@ -737,7 +710,7 @@ Stripeからのウェブフックイベントを管理。
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | aquarium_id | TEXT | UNIQUE, NOT NULL, FK(aquariums.id) | 水槽ID |
 | tank_type | TEXT | | 水槽タイプ (freshwater/saltwater/brackish) |
-| setup_text | TEXT | | セットアップ日 |
+| setup_date | TEXT | | セットアップ日 |
 | substrate_type | TEXT | | 底床タイプ (sand/gravel/soil/bare) |
 | substrate_brand | TEXT | | 底床ブランド |
 | substrate_depth_cm | REAL | | 底床厚さ（cm） |
@@ -807,7 +780,7 @@ Stripeからのウェブフックイベントを管理。
 | common_name | TEXT | | 一般名 |
 | livestock_type | TEXT | | 生体タイプ (fish/shrimp/snail/coral/plant/other) |
 | quantity | INTEGER | DEFAULT 1 | 個体数 |
-| added_text | TEXT | NOT NULL | 導入日 |
+| added_date | TEXT | NOT NULL | 導入日 |
 | removed_text | TEXT | | 取り出し日 |
 | removal_reason | TEXT | | 取り出し理由 |
 | notes | TEXT | | 備考 |
@@ -952,7 +925,7 @@ Stripeからのウェブフックイベントを管理。
 | photo_url | TEXT | NOT NULL | 写真URL |
 | thumbnail_url | TEXT | | サムネイルURL |
 | caption | TEXT | | キャプション |
-| taken_text | TEXT | | 撮影日 |
+| taken_date | TEXT | | 撮影日 |
 | file_size_kb | INTEGER | NOT NULL | ファイルサイズ(KB) |
 | created_at | TEXT | NOT NULL | 作成日時 |
 
@@ -987,7 +960,7 @@ Stripeからのウェブフックイベントを管理。
 | interval_days | INTEGER | NOT NULL | 実施間隔（日） |
 | preferred_time | TEXT | | 希望実施時刻 |
 | last_performed_text | TEXT | | 最終実施日 |
-| next_due_text | TEXT | NOT NULL | 次回予定日 |
+| next_due_date | TEXT | NOT NULL | 次回予定日 |
 | is_active | BOOLEAN | DEFAULT TRUE | 有効フラグ |
 | notification_enabled | BOOLEAN | DEFAULT TRUE | 通知有効フラグ |
 | notification_hours_before | INTEGER | DEFAULT 24 | 通知タイミング（時間前） |

@@ -33,3 +33,5 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tags;
 -- Stripe関連（外部キーなし）
 DROP TABLE IF EXISTS stripe_webhook_events;
+-- マイグレーション履歴をクリア（完全リセットのため）
+DELETE FROM d1_migrations;
