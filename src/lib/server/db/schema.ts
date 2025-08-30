@@ -61,11 +61,7 @@ export const oauthAccounts = sqliteTable(
 		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
-		userIdIdx: index('idx_oauth_accounts_user_id').on(table.userId),
-		providerUniqueIdx: index('idx_oauth_accounts_provider_unique').on(
-			table.provider,
-			table.providerUserId
-		)
+		userIdIdx: index('idx_oauth_accounts_user_id').on(table.userId)
 	})
 );
 
@@ -82,12 +78,12 @@ export const subscriptions = sqliteTable(
 		stripePriceId: text('stripe_price_id'),
 		planType: text('plan_type').notNull().default('free'), // free/basic/premium
 		status: text('status').notNull(), // active/canceled/past_due/trialing
-		currentPeriodStart: integer('current_period_start'),
-		currentPeriodEnd: integer('current_period_end'),
+		currentPeriodStart: text('current_period_start'),
+		currentPeriodEnd: text('current_period_end'),
 		cancelAtPeriodEnd: integer('cancel_at_period_end', { mode: 'boolean' }).default(false),
-		canceledAt: integer('canceled_at'),
-		trialStart: integer('trial_start'),
-		trialEnd: integer('trial_end'),
+		canceledAt: text('canceled_at'),
+		trialStart: text('trial_start'),
+		trialEnd: text('trial_end'),
 		aquariumLimit: integer('aquarium_limit').default(1),
 		photoStorageMb: integer('photo_storage_mb').default(100),
 		createdAt: text('created_at').notNull(),
@@ -313,8 +309,7 @@ export const aquariumSpecs = sqliteTable(
 		lightingHoursDaily: integer('lighting_hours_daily'),
 		lightingBrand: text('lighting_brand'),
 		lightingWattage: integer('lighting_wattage'),
-		co2System: integer('co2_system', { mode: 'boolean' }).default(false),
-		co2Type: text('co2_type'), // pressurized/diy/liquid
+		co2Type: text('co2_type'), // none/pressurized/diy/liquid
 		co2Bps: integer('co2_bps'), // bubbles per second
 		filterType: text('filter_type'), // external/internal/sump/hang_on_back
 		filterBrand: text('filter_brand'),

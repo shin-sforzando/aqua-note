@@ -1,6 +1,5 @@
 import type { PageServerLoad } from './$types';
 import { getDb } from '$lib/server/db';
-import { count } from 'drizzle-orm';
 import * as table from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async ({ platform }) => {
@@ -15,9 +14,9 @@ export const load: PageServerLoad = async ({ platform }) => {
 	try {
 		const db = getDb(platform);
 
-		// Test query to check D1 connection - count users
-		const result = await db.select({ count: count() }).from(table.users);
-		const userCount = result[0]?.count || 0;
+		// Test query to check D1 connection - simple select
+		const result = await db.select().from(table.users).limit(1);
+		const userCount = result.length;
 
 		return {
 			d1Status: 'connected',

@@ -276,8 +276,7 @@ erDiagram
         integer lighting_hours_daily
         string lighting_brand
         integer lighting_wattage
-        boolean co2_system "default: false"
-        string co2_type "pressurized/diy/liquid"
+        string co2_type "none/pressurized/diy/liquid"
         integer co2_bps "bubbles per second"
         string filter_type "external/internal/sump/hang_on_back"
         string filter_brand
@@ -746,8 +745,7 @@ Stripeからのウェブフックイベントを管理。
 | lighting_hours_daily | INTEGER | | 1日の照明時間 |
 | lighting_brand | TEXT | | 照明ブランド |
 | lighting_wattage | INTEGER | | 照明ワット数 |
-| co2_system | BOOLEAN | DEFAULT FALSE | CO2システム有無 |
-| co2_type | TEXT | | CO2タイプ (pressurized/diy/liquid) |
+| co2_type | TEXT | | CO2タイプ (none/pressurized/diy/liquid) |
 | co2_bps | INTEGER | | CO2添加量（bubbles per second） |
 | filter_type | TEXT | | フィルタータイプ (external/internal/sump/hang_on_back) |
 | filter_brand | TEXT | | フィルターブランド |
@@ -843,10 +841,6 @@ Stripeからのウェブフックイベントを管理。
 - `idx_maintenance_records_aquarium_id` (aquarium_id)
 - `idx_maintenance_records_performed_at` (performed_at)
 - `idx_maintenance_records_category` (category)
-
-**部分インデックス**（パフォーマンス最適化）:
-
-- `idx_maintenance_recent` (performed_at) WHERE performed_at > datetime('now', '-3 months') - 直近3ヶ月のみ
 
 #### 17. water_changes（水換え詳細）
 

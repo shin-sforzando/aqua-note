@@ -61,7 +61,6 @@ CREATE TABLE `aquarium_specs` (
   `lighting_hours_daily` integer,
   `lighting_brand` text,
   `lighting_wattage` integer,
-  `co2_system` integer DEFAULT false,
   `co2_type` text,
   `co2_bps` integer,
   `filter_type` text,
@@ -102,7 +101,7 @@ CREATE TABLE `aquariums` (
   `is_active` integer DEFAULT true,
   `is_public` integer DEFAULT false,
   `view_count` integer DEFAULT 0,
-  `published_at` integer,
+  `published_at` text,
   `photo_url` text,
   `created_at` text NOT NULL,
   `updated_at` text NOT NULL,
@@ -154,7 +153,7 @@ CREATE INDEX `idx_feeding_records_maintenance_record_id` ON `feeding_records` (`
 CREATE TABLE `maintenance_records` (
   `id` text PRIMARY KEY NOT NULL,
   `aquarium_id` text NOT NULL,
-  `performed_at` integer NOT NULL,
+  `performed_at` text NOT NULL,
   `category` text NOT NULL,
   `title` text,
   `description` text,
@@ -199,7 +198,7 @@ CREATE TABLE `multi_factor_auth` (
   `type` text NOT NULL,
   `secret` text,
   `verified` integer DEFAULT false,
-  `last_used_at` integer,
+  `last_used_at` text,
   `created_at` text NOT NULL,
   `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
@@ -215,9 +214,9 @@ CREATE TABLE `notifications` (
   `title` text NOT NULL,
   `message` text NOT NULL,
   `status` text,
-  `scheduled_for` integer,
-  `sent_at` integer,
-  `read_at` integer,
+  `scheduled_for` text,
+  `sent_at` text,
+  `read_at` text,
   `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
   FOREIGN KEY (`schedule_id`) REFERENCES `maintenance_schedules`(`id`) ON UPDATE no action ON DELETE no action
@@ -248,8 +247,6 @@ CREATE TABLE `oauth_accounts` (
 --> statement-breakpoint
 CREATE INDEX `idx_oauth_accounts_user_id` ON `oauth_accounts` (`user_id`);
 --> statement-breakpoint
-CREATE UNIQUE INDEX `idx_oauth_accounts_provider_unique` ON `oauth_accounts` (`provider`, `provider_user_id`);
---> statement-breakpoint
 CREATE TABLE `observation_records` (
   `id` text PRIMARY KEY NOT NULL,
   `maintenance_record_id` text NOT NULL,
@@ -274,7 +271,7 @@ CREATE TABLE `payment_histories` (
   `currency` text DEFAULT 'jpy',
   `status` text NOT NULL,
   `description` text,
-  `paid_at` integer,
+  `paid_at` text,
   `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -320,7 +317,7 @@ CREATE TABLE `stripe_webhook_events` (
   `error_message` text,
   `payload` text NOT NULL,
   `created_at` text NOT NULL,
-  `processed_at` integer
+  `processed_at` text
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `stripe_webhook_events_stripe_event_id_unique` ON `stripe_webhook_events` (`stripe_event_id`);
@@ -336,12 +333,12 @@ CREATE TABLE `subscriptions` (
   `stripe_price_id` text,
   `plan_type` text DEFAULT 'free' NOT NULL,
   `status` text NOT NULL,
-  `current_period_start` integer,
-  `current_period_end` integer,
+  `current_period_start` text,
+  `current_period_end` text,
   `cancel_at_period_end` integer DEFAULT false,
-  `canceled_at` integer,
-  `trial_start` integer,
-  `trial_end` integer,
+  `canceled_at` text,
+  `trial_start` text,
+  `trial_end` text,
   `aquarium_limit` integer DEFAULT 1,
   `photo_storage_mb` integer DEFAULT 100,
   `created_at` text NOT NULL,
@@ -451,7 +448,7 @@ CREATE INDEX `idx_water_changes_maintenance_record_id` ON `water_changes` (`main
 CREATE TABLE `water_parameters` (
   `id` text PRIMARY KEY NOT NULL,
   `aquarium_id` text NOT NULL,
-  `measured_at` integer NOT NULL,
+  `measured_at` text NOT NULL,
   `temperature_c` real,
   `ph` real,
   `ammonia_ppm` real,
@@ -476,9 +473,6 @@ WHERE `is_active` = 1;
 --> statement-breakpoint
 CREATE INDEX `idx_aquariums_public_published` ON `aquariums` (`published_at`)
 WHERE `is_public` = 1;
---> statement-breakpoint
-CREATE INDEX `idx_maintenance_recent` ON `maintenance_records` (`performed_at`)
-WHERE `performed_at` > datetime('now', '-3 months');
 --> statement-breakpoint
 CREATE INDEX `idx_schedules_active_due` ON `maintenance_schedules` (`next_due_date`)
 WHERE `is_active` = 1
