@@ -15,9 +15,9 @@ export const users = sqliteTable(
 		profilePhotoUrl: text('profile_photo_url'),
 		passwordHash: text('password_hash'), // OAuth専用ユーザーはNULL
 		stripeCustomerId: text('stripe_customer_id').unique(),
-		emailVerifiedAt: integer('email_verified_at', { mode: 'timestamp' }),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		emailVerifiedAt: text('email_verified_at'),
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		emailIdx: index('idx_users_email').on(table.email),
@@ -34,8 +34,8 @@ export const sessions = sqliteTable(
 		userId: text('user_id')
 			.notNull()
 			.references(() => users.id),
-		expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		expiresAt: text('expires_at').notNull(),
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_sessions_user_id').on(table.userId),
@@ -56,13 +56,16 @@ export const oauthAccounts = sqliteTable(
 		providerEmail: text('provider_email'),
 		accessToken: text('access_token'), // 暗号化推奨
 		refreshToken: text('refresh_token'), // 暗号化推奨
-		expiresAt: integer('expires_at', { mode: 'timestamp' }),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		expiresAt: text('expires_at'),
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_oauth_accounts_user_id').on(table.userId),
-		providerIdx: index('idx_oauth_accounts_provider').on(table.provider, table.providerUserId)
+		providerUniqueIdx: index('idx_oauth_accounts_provider_unique').on(
+			table.provider,
+			table.providerUserId
+		)
 	})
 );
 
@@ -79,16 +82,16 @@ export const subscriptions = sqliteTable(
 		stripePriceId: text('stripe_price_id'),
 		planType: text('plan_type').notNull().default('free'), // free/basic/premium
 		status: text('status').notNull(), // active/canceled/past_due/trialing
-		currentPeriodStart: integer('current_period_start', { mode: 'timestamp' }),
-		currentPeriodEnd: integer('current_period_end', { mode: 'timestamp' }),
+		currentPeriodStart: integer('current_period_start'),
+		currentPeriodEnd: integer('current_period_end'),
 		cancelAtPeriodEnd: integer('cancel_at_period_end', { mode: 'boolean' }).default(false),
-		canceledAt: integer('canceled_at', { mode: 'timestamp' }),
-		trialStart: integer('trial_start', { mode: 'timestamp' }),
-		trialEnd: integer('trial_end', { mode: 'timestamp' }),
+		canceledAt: integer('canceled_at'),
+		trialStart: integer('trial_start'),
+		trialEnd: integer('trial_end'),
 		aquariumLimit: integer('aquarium_limit').default(1),
 		photoStorageMb: integer('photo_storage_mb').default(100),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_subscriptions_user_id').on(table.userId),
@@ -113,8 +116,8 @@ export const paymentHistories = sqliteTable(
 		currency: text('currency').default('jpy'),
 		status: text('status').notNull(), // succeeded/failed/pending
 		description: text('description'),
-		paidAt: integer('paid_at', { mode: 'timestamp' }),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		paidAt: integer('paid_at'),
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_payment_histories_user_id').on(table.userId),
@@ -132,8 +135,8 @@ export const stripeWebhookEvents = sqliteTable(
 		processed: integer('processed', { mode: 'boolean' }).default(false),
 		errorMessage: text('error_message'),
 		payload: text('payload', { mode: 'json' }).notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		processedAt: integer('processed_at', { mode: 'timestamp' })
+		createdAt: text('created_at').notNull(),
+		processedAt: integer('processed_at')
 	},
 	(table) => ({
 		stripeEventIdIdx: index('idx_stripe_webhook_events_stripe_event_id').on(table.stripeEventId),
@@ -152,9 +155,9 @@ export const multiFactorAuth = sqliteTable(
 		type: text('type').notNull(), // totp/sms/backup_codes
 		secret: text('secret'), // 暗号化必須
 		verified: integer('verified', { mode: 'boolean' }).default(false),
-		lastUsedAt: integer('last_used_at', { mode: 'timestamp' }),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		lastUsedAt: integer('last_used_at'),
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_multi_factor_auth_user_id').on(table.userId)
@@ -176,8 +179,8 @@ export const userPreferences = sqliteTable(
 		pushNotifications: integer('push_notifications', { mode: 'boolean' }).default(false),
 		notificationSettings: text('notification_settings', { mode: 'json' }),
 		theme: text('theme').default('light'), // light/dark/auto
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_user_preferences_user_id').on(table.userId)
@@ -195,8 +198,8 @@ export const userProfiles = sqliteTable(
 			.references(() => users.id),
 		location: text('location'),
 		biography: text('biography'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_user_profiles_user_id').on(table.userId)
@@ -216,7 +219,7 @@ export const auditLogs = sqliteTable(
 		newValues: text('new_values', { mode: 'json' }),
 		ipAddress: text('ip_address'),
 		userAgent: text('user_agent'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_audit_logs_user_id').on(table.userId),
@@ -237,8 +240,8 @@ export const tags = sqliteTable(
 		name: text('name').notNull().unique(),
 		displayName: text('display_name'),
 		usageCount: integer('usage_count').default(0),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		nameIdx: index('idx_tags_name').on(table.name),
@@ -260,10 +263,10 @@ export const aquariums = sqliteTable(
 		isActive: integer('is_active', { mode: 'boolean' }).default(true),
 		isPublic: integer('is_public', { mode: 'boolean' }).default(false),
 		viewCount: integer('view_count').default(0),
-		publishedAt: integer('published_at', { mode: 'timestamp' }),
+		publishedAt: integer('published_at'),
 		photoUrl: text('photo_url'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_aquariums_user_id').on(table.userId),
@@ -283,7 +286,7 @@ export const aquariumTagRelations = sqliteTable(
 		tagId: text('tag_id')
 			.notNull()
 			.references(() => tags.id),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		primaryKey: primaryKey({ columns: [table.aquariumId, table.tagId] }),
@@ -318,8 +321,8 @@ export const aquariumSpecs = sqliteTable(
 		filterFlowRate: integer('filter_flow_rate'), // L/h
 		heaterWattage: integer('heater_wattage'),
 		targetTemperatureC: real('target_temperature_c'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_aquarium_specs_aquarium_id').on(table.aquariumId),
@@ -343,8 +346,8 @@ export const aquariumLivestock = sqliteTable(
 		removedDate: text('removed_date'),
 		removalReason: text('removal_reason'),
 		notes: text('notes'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_aquarium_livestock_aquarium_id').on(table.aquariumId),
@@ -361,13 +364,13 @@ export const maintenanceRecords = sqliteTable(
 		aquariumId: text('aquarium_id')
 			.notNull()
 			.references(() => aquariums.id),
-		performedAt: integer('performed_at', { mode: 'timestamp' }).notNull(),
+		performedAt: integer('performed_at').notNull(),
 		category: text('category').notNull(), // water_change/feeding/additives/cleaning/observation/other
 		title: text('title'),
 		description: text('description'),
 		notes: text('notes'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_maintenance_records_aquarium_id').on(table.aquariumId),
@@ -391,7 +394,7 @@ export const waterChanges = sqliteTable(
 		waterConditionerMl: real('water_conditioner_ml'),
 		oldTemperatureC: real('old_temperature_c'),
 		newTemperatureC: real('new_temperature_c'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		maintenanceRecordIdIdx: index('idx_water_changes_maintenance_record_id').on(
@@ -412,7 +415,7 @@ export const feedingRecords = sqliteTable(
 		foodType: text('food_type').notNull(),
 		amountGrams: real('amount_grams'),
 		notes: text('notes'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		maintenanceRecordIdIdx: index('idx_feeding_records_maintenance_record_id').on(
@@ -433,7 +436,7 @@ export const additiveRecords = sqliteTable(
 		amountMl: real('amount_ml').notNull(),
 		purpose: text('purpose'),
 		notes: text('notes'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		maintenanceRecordIdIdx: index('idx_additive_records_maintenance_record_id').on(
@@ -454,8 +457,7 @@ export const observationRecords = sqliteTable(
 			.references(() => maintenanceRecords.id),
 		mood: text('mood'), // good/normal/concern/problem
 		weather: text('weather'),
-		tags: text('tags'), // カンマ区切り
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		maintenanceRecordIdIdx: index('idx_observation_records_maintenance_record_id').on(
@@ -473,7 +475,7 @@ export const waterParameters = sqliteTable(
 		aquariumId: text('aquarium_id')
 			.notNull()
 			.references(() => aquariums.id),
-		measuredAt: integer('measured_at', { mode: 'timestamp' }).notNull(),
+		measuredAt: integer('measured_at').notNull(),
 		temperatureC: real('temperature_c'),
 		ph: real('ph'),
 		ammoniaPpm: real('ammonia_ppm'),
@@ -484,7 +486,7 @@ export const waterParameters = sqliteTable(
 		phosphatePpm: real('phosphate_ppm'),
 		salinityPpt: real('salinity_ppt'),
 		notes: text('notes'),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_water_parameters_aquarium_id').on(table.aquariumId),
@@ -505,7 +507,7 @@ export const aquariumPhotos = sqliteTable(
 		caption: text('caption'),
 		takenDate: text('taken_date'),
 		fileSizeKb: integer('file_size_kb').notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_aquarium_photos_aquarium_id').on(table.aquariumId)
@@ -524,7 +526,7 @@ export const recordPhotos = sqliteTable(
 		thumbnailUrl: text('thumbnail_url'),
 		caption: text('caption'),
 		fileSizeKb: integer('file_size_kb').notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		maintenanceRecordIdIdx: index('idx_record_photos_maintenance_record_id').on(
@@ -550,8 +552,8 @@ export const maintenanceSchedules = sqliteTable(
 		isActive: integer('is_active', { mode: 'boolean' }).default(true),
 		notificationEnabled: integer('notification_enabled', { mode: 'boolean' }).default(true),
 		notificationHoursBefore: integer('notification_hours_before').default(24),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+		createdAt: text('created_at').notNull(),
+		updatedAt: text('updated_at').notNull()
 	},
 	(table) => ({
 		aquariumIdIdx: index('idx_maintenance_schedules_aquarium_id').on(table.aquariumId),
@@ -573,10 +575,10 @@ export const notifications = sqliteTable(
 		title: text('title').notNull(),
 		message: text('message').notNull(),
 		status: text('status'), // pending/sent/read/cancelled
-		scheduledFor: integer('scheduled_for', { mode: 'timestamp' }),
-		sentAt: integer('sent_at', { mode: 'timestamp' }),
-		readAt: integer('read_at', { mode: 'timestamp' }),
-		createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+		scheduledFor: integer('scheduled_for'),
+		sentAt: integer('sent_at'),
+		readAt: integer('read_at'),
+		createdAt: text('created_at').notNull()
 	},
 	(table) => ({
 		userIdIdx: index('idx_notifications_user_id').on(table.userId),

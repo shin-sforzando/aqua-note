@@ -5,7 +5,7 @@ CREATE TABLE `additive_records` (
   `amount_ml` real NOT NULL,
   `purpose` text,
   `notes` text,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`maintenance_record_id`) REFERENCES `maintenance_records`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -24,8 +24,8 @@ CREATE TABLE `aquarium_livestock` (
   `removed_date` text,
   `removal_reason` text,
   `notes` text,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -43,7 +43,7 @@ CREATE TABLE `aquarium_photos` (
   `caption` text,
   `taken_date` text,
   `file_size_kb` integer NOT NULL,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -69,8 +69,8 @@ CREATE TABLE `aquarium_specs` (
   `filter_flow_rate` integer,
   `heater_wattage` integer,
   `target_temperature_c` real,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -83,7 +83,7 @@ CREATE INDEX `idx_aquarium_specs_tank_type` ON `aquarium_specs` (`tank_type`);
 CREATE TABLE `aquarium_tag_relations` (
   `aquarium_id` text NOT NULL,
   `tag_id` text NOT NULL,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   PRIMARY KEY(`aquarium_id`, `tag_id`),
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action,
   FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON UPDATE no action ON DELETE no action
@@ -104,8 +104,8 @@ CREATE TABLE `aquariums` (
   `view_count` integer DEFAULT 0,
   `published_at` integer,
   `photo_url` text,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -127,7 +127,7 @@ CREATE TABLE `audit_logs` (
   `new_values` text,
   `ip_address` text,
   `user_agent` text,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -143,7 +143,7 @@ CREATE TABLE `feeding_records` (
   `food_type` text NOT NULL,
   `amount_grams` real,
   `notes` text,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`maintenance_record_id`) REFERENCES `maintenance_records`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -159,8 +159,8 @@ CREATE TABLE `maintenance_records` (
   `title` text,
   `description` text,
   `notes` text,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -182,8 +182,8 @@ CREATE TABLE `maintenance_schedules` (
   `is_active` integer DEFAULT true,
   `notification_enabled` integer DEFAULT true,
   `notification_hours_before` integer DEFAULT 24,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -200,8 +200,8 @@ CREATE TABLE `multi_factor_auth` (
   `secret` text,
   `verified` integer DEFAULT false,
   `last_used_at` integer,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -218,7 +218,7 @@ CREATE TABLE `notifications` (
   `scheduled_for` integer,
   `sent_at` integer,
   `read_at` integer,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
   FOREIGN KEY (`schedule_id`) REFERENCES `maintenance_schedules`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -239,23 +239,23 @@ CREATE TABLE `oauth_accounts` (
   `provider_email` text,
   `access_token` text,
   `refresh_token` text,
-  `expires_at` integer,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+  `expires_at` text,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
+  UNIQUE(`provider`, `provider_user_id`)
 );
 --> statement-breakpoint
 CREATE INDEX `idx_oauth_accounts_user_id` ON `oauth_accounts` (`user_id`);
 --> statement-breakpoint
-CREATE INDEX `idx_oauth_accounts_provider` ON `oauth_accounts` (`provider`, `provider_user_id`);
+CREATE UNIQUE INDEX `idx_oauth_accounts_provider_unique` ON `oauth_accounts` (`provider`, `provider_user_id`);
 --> statement-breakpoint
 CREATE TABLE `observation_records` (
   `id` text PRIMARY KEY NOT NULL,
   `maintenance_record_id` text NOT NULL,
   `mood` text,
   `weather` text,
-  `tags` text,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`maintenance_record_id`) REFERENCES `maintenance_records`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -275,7 +275,7 @@ CREATE TABLE `payment_histories` (
   `status` text NOT NULL,
   `description` text,
   `paid_at` integer,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -294,7 +294,7 @@ CREATE TABLE `record_photos` (
   `thumbnail_url` text,
   `caption` text,
   `file_size_kb` integer NOT NULL,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`maintenance_record_id`) REFERENCES `maintenance_records`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -303,8 +303,8 @@ CREATE INDEX `idx_record_photos_maintenance_record_id` ON `record_photos` (`main
 CREATE TABLE `sessions` (
   `id` text PRIMARY KEY NOT NULL,
   `user_id` text NOT NULL,
-  `expires_at` integer NOT NULL,
-  `created_at` integer NOT NULL,
+  `expires_at` text NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -319,7 +319,7 @@ CREATE TABLE `stripe_webhook_events` (
   `processed` integer DEFAULT false,
   `error_message` text,
   `payload` text NOT NULL,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   `processed_at` integer
 );
 --> statement-breakpoint
@@ -344,8 +344,8 @@ CREATE TABLE `subscriptions` (
   `trial_end` integer,
   `aquarium_limit` integer DEFAULT 1,
   `photo_storage_mb` integer DEFAULT 100,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -364,8 +364,8 @@ CREATE TABLE `tags` (
   `name` text NOT NULL,
   `display_name` text,
   `usage_count` integer DEFAULT 0,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `tags_name_unique` ON `tags` (`name`);
@@ -383,8 +383,8 @@ CREATE TABLE `user_preferences` (
   `push_notifications` integer DEFAULT false,
   `notification_settings` text,
   `theme` text DEFAULT 'light',
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -397,8 +397,8 @@ CREATE TABLE `user_profiles` (
   `user_id` text NOT NULL,
   `location` text,
   `biography` text,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -414,9 +414,9 @@ CREATE TABLE `users` (
   `profile_photo_url` text,
   `password_hash` text,
   `stripe_customer_id` text,
-  `email_verified_at` integer,
-  `created_at` integer NOT NULL,
-  `updated_at` integer NOT NULL
+  `email_verified_at` text,
+  `created_at` text NOT NULL,
+  `updated_at` text NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);
@@ -440,7 +440,7 @@ CREATE TABLE `water_changes` (
   `water_conditioner_ml` real,
   `old_temperature_c` real,
   `new_temperature_c` real,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`maintenance_record_id`) REFERENCES `maintenance_records`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -462,10 +462,27 @@ CREATE TABLE `water_parameters` (
   `phosphate_ppm` real,
   `salinity_ppt` real,
   `notes` text,
-  `created_at` integer NOT NULL,
+  `created_at` text NOT NULL,
   FOREIGN KEY (`aquarium_id`) REFERENCES `aquariums`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE INDEX `idx_water_parameters_aquarium_id` ON `water_parameters` (`aquarium_id`);
 --> statement-breakpoint
 CREATE INDEX `idx_water_parameters_measured_at` ON `water_parameters` (`measured_at`);
+--> statement-breakpoint
+-- 部分インデックス（パフォーマンス最適化）
+CREATE INDEX `idx_aquariums_active_user` ON `aquariums` (`user_id`)
+WHERE `is_active` = 1;
+--> statement-breakpoint
+CREATE INDEX `idx_aquariums_public_published` ON `aquariums` (`published_at`)
+WHERE `is_public` = 1;
+--> statement-breakpoint
+CREATE INDEX `idx_maintenance_recent` ON `maintenance_records` (`performed_at`)
+WHERE `performed_at` > datetime('now', '-3 months');
+--> statement-breakpoint
+CREATE INDEX `idx_schedules_active_due` ON `maintenance_schedules` (`next_due_date`)
+WHERE `is_active` = 1
+  AND `notification_enabled` = 1;
+--> statement-breakpoint
+CREATE INDEX `idx_notifications_unread` ON `notifications` (`scheduled_for`)
+WHERE `status` = 'pending';

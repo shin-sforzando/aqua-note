@@ -13,6 +13,8 @@ Aqua Noteは水槽管理（アクアリウム管理）用のWebアプリケー�
 - **完全スキーマ**: サービスローンチ後の変更を避けるため、最初から全機能のテーブルを実装
 - **外部キー制約**: データの整合性を保証
 - **インデックス**: 頻繁にアクセスされるカラムに適切に設定
+- **日付・時刻統一**: 全てTEXT型（ISO 8601形式）で統一、SQLiteの日付関数を活用
+- **部分インデックス**: 実際の使用パターンに基づく条件付きインデックスでパフォーマンス最適化
 
 ## ID戦略（ULID採用の理由）
 
@@ -51,7 +53,7 @@ import { ulid } from 'ulid';
 const newId = ulid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAV"
 
 // タイムスタンプ部分の抽出も可能
-const timestamp = decodeTime(newId); // ミリ秒単位のUnixタイムスタンプ
+const text = decodeTime(newId); // ミリ秒単位のUnixタイムスタンプ
 ```
 
 ## ER図
@@ -84,16 +86,16 @@ erDiagram
         string profile_photo_url
         string password_hash "nullable for OAuth users"
         string stripe_customer_id UK "nullable"
-        timestamp email_verified_at
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text email_verified_at
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     sessions {
         string id PK "ULID"
         string user_id FK "not null"
-        timestamp expires_at "not null"
-        timestamp created_at "not null"
+        text expires_at "not null"
+        text created_at "not null"
     }
 
     oauth_accounts {
@@ -104,9 +106,11 @@ erDiagram
         string provider_email
         string access_token "encrypted"
         string refresh_token "encrypted"
-        timestamp expires_at
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text expires_at
+        text created_at "not null"
+        text updated_at "not null"
+        
+        UK_provider_user "provider, provider_user_id"
     }
 
     subscriptions {
@@ -116,16 +120,16 @@ erDiagram
         string stripe_price_id
         string plan_type "free/basic/premium, default: free"
         string status "active/canceled/past_due/trialing"
-        timestamp current_period_start
-        timestamp current_period_end
+        text current_period_start
+        text current_period_end
         boolean cancel_at_period_end "default: false"
-        timestamp canceled_at
-        timestamp trial_start
-        timestamp trial_end
+        text canceled_at
+        text trial_start
+        text trial_end
         integer aquarium_limit "default: 1"
         integer photo_storage_mb "default: 100"
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     payment_histories {
@@ -137,8 +141,8 @@ erDiagram
         string currency "default: jpy"
         string status "succeeded/failed/pending"
         string description
-        timestamp paid_at
-        timestamp created_at "not null"
+        text paid_at
+        text created_at "not null"
     }
 
     stripe_webhook_events {
@@ -148,8 +152,8 @@ erDiagram
         boolean processed "default: false"
         string error_message
         json payload "not null"
-        timestamp created_at "not null"
-        timestamp processed_at
+        text created_at "not null"
+        text processed_at
     }
 
     multi_factor_auth {
@@ -158,9 +162,9 @@ erDiagram
         string type "totp/sms/backup_codes"
         string secret "encrypted"
         boolean verified "default: false"
-        timestamp last_used_at
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text last_used_at
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     user_preferences {
@@ -172,8 +176,8 @@ erDiagram
         boolean push_notifications "default: false"
         json notification_settings
         string theme "light/dark/auto, default: light"
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     audit_logs {
@@ -186,7 +190,7 @@ erDiagram
         json new_values
         string ip_address
         string user_agent
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     user_profiles {
@@ -194,8 +198,8 @@ erDiagram
         string user_id FK "unique, not null"
         string location
         string biography
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 ```
 
@@ -230,14 +234,14 @@ erDiagram
         string name UK "not null"
         string display_name
         integer usage_count "default: 0"
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     aquarium_tag_relations {
         string aquarium_id FK "not null"
         string tag_id FK "not null"
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     users {
@@ -254,17 +258,17 @@ erDiagram
         boolean is_active "default: true"
         boolean is_public "default: false"
         integer view_count "default: 0"
-        timestamp published_at
+        text published_at
         string photo_url
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     aquarium_specs {
         string id PK "ULID"
         string aquarium_id FK "unique, not null"
         string tank_type "freshwater/saltwater/brackish"
-        date setup_date
+        text setup_date
         string substrate_type "sand/gravel/soil/bare"
         string substrate_brand
         real substrate_depth_cm
@@ -280,8 +284,8 @@ erDiagram
         integer filter_flow_rate "L/h"
         integer heater_wattage
         real target_temperature_c
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     aquarium_livestock {
@@ -291,24 +295,24 @@ erDiagram
         string common_name
         string livestock_type "fish/shrimp/snail/coral/plant/other"
         integer quantity "default: 1"
-        date added_date "not null"
-        date removed_date
+        text added_text "not null"
+        text removed_date
         string removal_reason
         string notes
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     maintenance_records {
         string id PK "ULID"
         string aquarium_id FK "not null"
-        timestamp performed_at "not null"
+        text performed_at "not null"
         string category "water_change/feeding/additives/cleaning/observation/other"
         string title
         string description
         string notes
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     water_changes {
@@ -320,7 +324,7 @@ erDiagram
         real water_conditioner_ml
         real old_temperature_c
         real new_temperature_c
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     feeding_records {
@@ -329,7 +333,7 @@ erDiagram
         string food_type "not null"
         real amount_grams
         string notes
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     additive_records {
@@ -339,13 +343,13 @@ erDiagram
         real amount_ml "not null"
         string purpose
         string notes
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     water_parameters {
         string id PK "ULID"
         string aquarium_id FK "not null"
-        timestamp measured_at "not null"
+        text measured_at "not null"
         real temperature_c
         real ph
         real ammonia_ppm
@@ -356,7 +360,7 @@ erDiagram
         real phosphate_ppm
         real salinity_ppt
         string notes
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     observation_records {
@@ -364,8 +368,7 @@ erDiagram
         string maintenance_record_id FK "unique, not null"
         string mood "good/normal/concern/problem"
         string weather
-        string tags "comma-separated"
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     aquarium_photos {
@@ -374,9 +377,9 @@ erDiagram
         string photo_url "not null"
         string thumbnail_url
         string caption
-        date taken_date
+        text taken_date
         integer file_size_kb "not null"
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     record_photos {
@@ -386,7 +389,7 @@ erDiagram
         string thumbnail_url
         string caption
         integer file_size_kb "not null"
-        timestamp created_at "not null"
+        text created_at "not null"
     }
 
     maintenance_schedules {
@@ -396,13 +399,13 @@ erDiagram
         json categories "array of strings"
         integer interval_days "not null"
         time preferred_time
-        date last_performed_date
-        date next_due_date "not null"
+        text last_performed_date
+        text next_due_text "not null"
         boolean is_active "default: true"
         boolean notification_enabled "default: true"
         integer notification_hours_before "default: 24"
-        timestamp created_at "not null"
-        timestamp updated_at "not null"
+        text created_at "not null"
+        text updated_at "not null"
     }
 
     notifications {
@@ -413,11 +416,64 @@ erDiagram
         string title "not null"
         string message "not null"
         string status "pending/sent/read/cancelled"
-        timestamp scheduled_for
-        timestamp sent_at
-        timestamp read_at
-        timestamp created_at "not null"
+        text scheduled_for
+        text sent_at
+        text read_at
+        text created_at "not null"
     }
+```
+
+## パフォーマンス最適化
+
+### 部分インデックス（条件付きインデックス）
+
+実際の使用パターンに基づいて、条件付きインデックスを設定し、パフォーマンスを最適化:
+
+```sql
+-- アクティブ水槽のユーザー検索（最も頻繁）
+CREATE INDEX idx_aquariums_active_user ON aquariums(user_id) WHERE is_active = 1;
+
+-- 公開水槽の公開日順（コミュニティ機能）
+CREATE INDEX idx_aquariums_public_published ON aquariums(published_at) WHERE is_public = 1;
+
+-- 直近3ヶ月のメンテナンス履歴（よく参照される）
+CREATE INDEX idx_maintenance_recent ON maintenance_records(performed_at) 
+WHERE performed_at > datetime('now', '-3 months');
+
+-- アクティブスケジュールの期限管理（通知機能）
+CREATE INDEX idx_schedules_active_due ON maintenance_schedules(next_due_date) 
+WHERE is_active = 1 AND notification_enabled = 1;
+
+-- 未読通知の予定日（通知システム）
+CREATE INDEX idx_notifications_unread ON notifications(scheduled_for) 
+WHERE status = 'pending';
+```
+
+### 日付・時刻の統一設計
+
+全ての日付・時刻フィールドをTEXT型（ISO 8601形式）で統一:
+
+```sql
+-- 日付のみ: "2024-01-15"
+setup_date TEXT
+
+-- 日時: "2024-01-15T10:30:00.000Z"
+created_at TEXT
+performed_at TEXT
+```
+
+SQLiteの強力な日付関数を活用:
+
+```sql
+-- 今日の作業
+WHERE date(performed_at) = date('now')
+
+-- 先週の記録  
+WHERE performed_at >= date('now', '-7 days')
+
+-- 月別集計
+SELECT strftime('%Y-%m', performed_at) as month, count(*)
+FROM maintenance_records GROUP BY month
 ```
 
 ## テーブル詳細設計
@@ -437,9 +493,9 @@ erDiagram
 | profile_photo_url | TEXT | | プロフィール写真URL |
 | password_hash | TEXT | | パスワードハッシュ（OAuth専用ユーザーはNULL） |
 | stripe_customer_id | TEXT | UNIQUE | Stripe顧客ID |
-| email_verified_at | TIMESTAMP | | メール確認日時 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| email_verified_at | TEXT | | メール確認日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -455,8 +511,8 @@ erDiagram
 |---------|-----|------|------|
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | user_id | TEXT | NOT NULL, FK(users.id) | ユーザーID |
-| expires_at | TIMESTAMP | NOT NULL | セッション有効期限 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| expires_at | TEXT | NOT NULL | セッション有効期限 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -476,14 +532,18 @@ erDiagram
 | provider_email | TEXT | | プロバイダーから取得したメール |
 | access_token | TEXT | | アクセストークン（暗号化推奨） |
 | refresh_token | TEXT | | リフレッシュトークン（暗号化推奨） |
-| expires_at | TIMESTAMP | | トークン有効期限 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| expires_at | TEXT | | トークン有効期限 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
+
+**制約**:
+
+- **UNIQUE制約**: `(provider, provider_user_id)` - 同一プロバイダでの重複登録を防止
 
 **インデックス**:
 
 - `idx_oauth_accounts_user_id` (user_id)
-- `idx_oauth_accounts_provider` (provider, provider_user_id) - UNIQUE
+- `idx_oauth_accounts_provider_unique` (provider, provider_user_id) - UNIQUE
 
 #### 4. subscriptions（サブスクリプション）
 
@@ -497,16 +557,16 @@ erDiagram
 | stripe_price_id | TEXT | | Stripe料金プランID |
 | plan_type | TEXT | NOT NULL, DEFAULT 'free' | プランタイプ (free/basic/premium) |
 | status | TEXT | NOT NULL | ステータス (active/canceled/past_due/trialing) |
-| current_period_start | TIMESTAMP | | 現在の請求期間開始 |
-| current_period_end | TIMESTAMP | | 現在の請求期間終了 |
+| current_period_start | TEXT | | 現在の請求期間開始 |
+| current_period_end | TEXT | | 現在の請求期間終了 |
 | cancel_at_period_end | BOOLEAN | DEFAULT FALSE | 期間終了時にキャンセル |
-| canceled_at | TIMESTAMP | | キャンセル日時 |
-| trial_start | TIMESTAMP | | トライアル開始日時 |
-| trial_end | TIMESTAMP | | トライアル終了日時 |
+| canceled_at | TEXT | | キャンセル日時 |
+| trial_start | TEXT | | トライアル開始日時 |
+| trial_end | TEXT | | トライアル終了日時 |
 | aquarium_limit | INTEGER | DEFAULT 1 | 登録可能水槽数 |
 | photo_storage_mb | INTEGER | DEFAULT 100 | 写真ストレージ容量(MB) |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -528,8 +588,8 @@ Stripeでの支払い履歴を記録。
 | currency | TEXT | DEFAULT 'jpy' | 通貨 |
 | status | TEXT | NOT NULL | ステータス (succeeded/failed/pending) |
 | description | TEXT | | 説明 |
-| paid_at | TIMESTAMP | | 支払い日時 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| paid_at | TEXT | | 支払い日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -548,8 +608,8 @@ Stripeからのウェブフックイベントを管理。
 | processed | BOOLEAN | DEFAULT FALSE | 処理済みフラグ |
 | error_message | TEXT | | エラーメッセージ |
 | payload | JSON | NOT NULL | イベントペイロード |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| processed_at | TIMESTAMP | | 処理日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| processed_at | TEXT | | 処理日時 |
 
 **インデックス**:
 
@@ -567,9 +627,9 @@ Stripeからのウェブフックイベントを管理。
 | type | TEXT | NOT NULL | 認証タイプ (totp/sms/backup_codes) |
 | secret | TEXT | | シークレット（暗号化必須） |
 | verified | BOOLEAN | DEFAULT FALSE | 検証済みフラグ |
-| last_used_at | TIMESTAMP | | 最終使用日時 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| last_used_at | TEXT | | 最終使用日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -589,8 +649,8 @@ Stripeからのウェブフックイベントを管理。
 | push_notifications | BOOLEAN | DEFAULT FALSE | プッシュ通知有効 |
 | notification_settings | JSON | | 詳細な通知設定 |
 | theme | TEXT | DEFAULT 'light' | テーマ (light/dark/auto) |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -606,8 +666,8 @@ Stripeからのウェブフックイベントを管理。
 | user_id | TEXT | UNIQUE, NOT NULL, FK(users.id) | ユーザーID |
 | location | TEXT | | 地域（関東、大阪、California等、自由記述） |
 | biography | TEXT | | 自己紹介文 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -628,7 +688,7 @@ Stripeからのウェブフックイベントを管理。
 | new_values | JSON | | 変更後の値 |
 | ip_address | TEXT | | IPアドレス |
 | user_agent | TEXT | | ユーザーエージェント |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -652,10 +712,10 @@ Stripeからのウェブフックイベントを管理。
 | is_active | BOOLEAN | DEFAULT TRUE | アクティブフラグ |
 | is_public | BOOLEAN | DEFAULT FALSE | 公開フラグ（TRUE=誰でも閲覧可能） |
 | view_count | INTEGER | DEFAULT 0 | 閲覧数（公開時のみカウント） |
-| published_at | TIMESTAMP | | 初回公開日時 |
+| published_at | TEXT | | 初回公開日時 |
 | photo_url | TEXT | | メイン写真URL |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -663,6 +723,11 @@ Stripeからのウェブフックイベントを管理。
 - `idx_aquariums_is_active` (is_active)
 - `idx_aquariums_is_public` (is_public)
 - `idx_aquariums_published_at` (published_at)
+
+**部分インデックス**（パフォーマンス最適化）:
+
+- `idx_aquariums_active_user` (user_id) WHERE is_active = 1 - アクティブ水槽のみ
+- `idx_aquariums_public_published` (published_at) WHERE is_public = 1 - 公開水槽のみ
 
 #### 12. aquarium_specs（水槽仕様）
 
@@ -673,7 +738,7 @@ Stripeからのウェブフックイベントを管理。
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | aquarium_id | TEXT | UNIQUE, NOT NULL, FK(aquariums.id) | 水槽ID |
 | tank_type | TEXT | | 水槽タイプ (freshwater/saltwater/brackish) |
-| setup_date | DATE | | セットアップ日 |
+| setup_text | TEXT | | セットアップ日 |
 | substrate_type | TEXT | | 底床タイプ (sand/gravel/soil/bare) |
 | substrate_brand | TEXT | | 底床ブランド |
 | substrate_depth_cm | REAL | | 底床厚さ（cm） |
@@ -689,8 +754,8 @@ Stripeからのウェブフックイベントを管理。
 | filter_flow_rate | INTEGER | | フィルター流量（L/h） |
 | heater_wattage | INTEGER | | ヒーターワット数 |
 | target_temperature_c | REAL | | 目標水温（℃） |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -707,8 +772,8 @@ Stripeからのウェブフックイベントを管理。
 | name | TEXT | UNIQUE, NOT NULL | タグ名（ネオンテトラ、流木など） |
 | display_name | TEXT | | 表示名（日本語名など） |
 | usage_count | INTEGER | DEFAULT 0 | 使用回数（人気度指標） |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -723,7 +788,7 @@ Stripeからのウェブフックイベントを管理。
 |---------|-----|------|------|
 | aquarium_id | TEXT | NOT NULL, FK(aquariums.id) | 水槽ID |
 | tag_id | TEXT | NOT NULL, FK(tags.id) | タグID |
-| created_at | TIMESTAMP | NOT NULL | 関連付け日時 |
+| created_at | TEXT | NOT NULL | 関連付け日時 |
 
 **主キー**: `(aquarium_id, tag_id)`
 
@@ -744,12 +809,12 @@ Stripeからのウェブフックイベントを管理。
 | common_name | TEXT | | 一般名 |
 | livestock_type | TEXT | | 生体タイプ (fish/shrimp/snail/coral/plant/other) |
 | quantity | INTEGER | DEFAULT 1 | 個体数 |
-| added_date | DATE | NOT NULL | 導入日 |
-| removed_date | DATE | | 取り出し日 |
+| added_text | TEXT | NOT NULL | 導入日 |
+| removed_text | TEXT | | 取り出し日 |
 | removal_reason | TEXT | | 取り出し理由 |
 | notes | TEXT | | 備考 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
@@ -765,19 +830,23 @@ Stripeからのウェブフックイベントを管理。
 |---------|-----|------|------|
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | aquarium_id | TEXT | NOT NULL, FK(aquariums.id) | 水槽ID |
-| performed_at | TIMESTAMP | NOT NULL | 実施日時 |
+| performed_at | TEXT | NOT NULL | 実施日時 |
 | category | TEXT | NOT NULL | 作業カテゴリ (water_change/feeding/additives/cleaning/observation/other) |
-| title | TEXT | | 作業タイトル（例：「週末の水換え」） |
+| title | TEXT | | 作業タイトル（例:「週末の水換え」） |
 | description | TEXT | | 作業内容の詳細 |
 | notes | TEXT | | 備考 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
 - `idx_maintenance_records_aquarium_id` (aquarium_id)
 - `idx_maintenance_records_performed_at` (performed_at)
 - `idx_maintenance_records_category` (category)
+
+**部分インデックス**（パフォーマンス最適化）:
+
+- `idx_maintenance_recent` (performed_at) WHERE performed_at > datetime('now', '-3 months') - 直近3ヶ月のみ
 
 #### 17. water_changes（水換え詳細）
 
@@ -793,7 +862,7 @@ Stripeからのウェブフックイベントを管理。
 | water_conditioner_ml | REAL | | カルキ抜き剤使用量(ml) |
 | old_temperature_c | REAL | | 交換前水温（℃） |
 | new_temperature_c | REAL | | 交換後水温（℃） |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -810,7 +879,7 @@ Stripeからのウェブフックイベントを管理。
 | food_type | TEXT | NOT NULL | 餌の種類 |
 | amount_grams | REAL | | 給餌量（グラム） |
 | notes | TEXT | | 備考 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -828,7 +897,7 @@ Stripeからのウェブフックイベントを管理。
 | amount_ml | REAL | NOT NULL | 投入量（ml） |
 | purpose | TEXT | | 投入目的（pH調整、水質改善など） |
 | notes | TEXT | | 備考 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -845,8 +914,7 @@ Stripeからのウェブフックイベントを管理。
 | maintenance_record_id | TEXT | UNIQUE, NOT NULL, FK(maintenance_records.id) | メンテナンス記録ID |
 | mood | TEXT | | 水槽の調子 (good/normal/concern/problem) |
 | weather | TEXT | | 天気（環境要因として記録） |
-| tags | TEXT | | タグ（カンマ区切り） |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -861,7 +929,7 @@ Stripeからのウェブフックイベントを管理。
 |---------|-----|------|------|
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | aquarium_id | TEXT | NOT NULL, FK(aquariums.id) | 水槽ID |
-| measured_at | TIMESTAMP | NOT NULL | 測定日時 |
+| measured_at | TEXT | NOT NULL | 測定日時 |
 | temperature_c | REAL | | 水温（℃） |
 | ph | REAL | | pH値 |
 | ammonia_ppm | REAL | | アンモニア濃度(ppm) |
@@ -872,7 +940,7 @@ Stripeからのウェブフックイベントを管理。
 | phosphate_ppm | REAL | | リン酸塩濃度(ppm) |
 | salinity_ppt | REAL | | 塩分濃度(ppt) |
 | notes | TEXT | | 備考 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -890,9 +958,9 @@ Stripeからのウェブフックイベントを管理。
 | photo_url | TEXT | NOT NULL | 写真URL |
 | thumbnail_url | TEXT | | サムネイルURL |
 | caption | TEXT | | キャプション |
-| taken_date | DATE | | 撮影日 |
+| taken_text | TEXT | | 撮影日 |
 | file_size_kb | INTEGER | NOT NULL | ファイルサイズ(KB) |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 #### 23. record_photos（記録写真）
 
@@ -906,7 +974,7 @@ Stripeからのウェブフックイベントを管理。
 | thumbnail_url | TEXT | | サムネイルURL |
 | caption | TEXT | | キャプション |
 | file_size_kb | INTEGER | NOT NULL | ファイルサイズ(KB) |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
 
 **インデックス**:
 
@@ -920,23 +988,27 @@ Stripeからのウェブフックイベントを管理。
 |---------|-----|------|------|
 | id | TEXT | PRIMARY KEY | ULID形式の一意識別子 |
 | aquarium_id | TEXT | NOT NULL, FK(aquariums.id) | 水槽ID |
-| schedule_name | TEXT | NOT NULL | スケジュール名（例：「週末の水換え」） |
+| schedule_name | TEXT | NOT NULL | スケジュール名（例:「週末の水換え」） |
 | categories | JSON | NOT NULL | 実施する作業カテゴリ ['water_change', 'cleaning'] |
 | interval_days | INTEGER | NOT NULL | 実施間隔（日） |
-| preferred_time | TIME | | 希望実施時刻 |
-| last_performed_date | DATE | | 最終実施日 |
-| next_due_date | DATE | NOT NULL | 次回予定日 |
+| preferred_time | TEXT | | 希望実施時刻 |
+| last_performed_text | TEXT | | 最終実施日 |
+| next_due_text | TEXT | NOT NULL | 次回予定日 |
 | is_active | BOOLEAN | DEFAULT TRUE | 有効フラグ |
 | notification_enabled | BOOLEAN | DEFAULT TRUE | 通知有効フラグ |
 | notification_hours_before | INTEGER | DEFAULT 24 | 通知タイミング（時間前） |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
-| updated_at | TIMESTAMP | NOT NULL | 更新日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+| updated_at | TEXT | NOT NULL | 更新日時 |
 
 **インデックス**:
 
 - `idx_maintenance_schedules_aquarium_id` (aquarium_id)
 - `idx_maintenance_schedules_next_due_date` (next_due_date)
 - `idx_maintenance_schedules_is_active` (is_active)
+
+**部分インデックス**（パフォーマンス最適化）:
+
+- `idx_schedules_active_due` (next_due_date) WHERE is_active = 1 AND notification_enabled = 1 - アクティブな通知スケジュールのみ
 
 #### 25. notifications（通知）
 
@@ -951,7 +1023,18 @@ Stripeからのウェブフックイベントを管理。
 | title | TEXT | NOT NULL | タイトル |
 | message | TEXT | NOT NULL | メッセージ |
 | status | TEXT | | ステータス |
-| scheduled_for | TIMESTAMP | | 予定送信日時 |
-| sent_at | TIMESTAMP | | 送信日時 |
-| read_at | TIMESTAMP | | 既読日時 |
-| created_at | TIMESTAMP | NOT NULL | 作成日時 |
+| scheduled_for | TEXT | | 予定送信日時 |
+| sent_at | TEXT | | 送信日時 |
+| read_at | TEXT | | 既読日時 |
+| created_at | TEXT | NOT NULL | 作成日時 |
+
+**インデックス**:
+
+- `idx_notifications_user_id` (user_id)
+- `idx_notifications_schedule_id` (schedule_id)
+- `idx_notifications_status` (status)
+- `idx_notifications_scheduled_for` (scheduled_for)
+
+**部分インデックス**（パフォーマンス最適化）:
+
+- `idx_notifications_unread` (scheduled_for) WHERE status = 'pending' - 未読通知のみ

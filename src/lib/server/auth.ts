@@ -21,8 +21,8 @@ export async function createSession(platform: App.Platform, token: string, userI
 	const session: table.Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30),
-		createdAt: new Date()
+		expiresAt: new Date(Date.now() + DAY_IN_MS * 30).toISOString(),
+		createdAt: new Date().toISOString()
 	};
 	await db.insert(table.sessions).values(session);
 	return session;
@@ -46,15 +46,15 @@ export async function validateSessionToken(platform: App.Platform, token: string
 	}
 	const { session, user } = result;
 
-	const sessionExpired = Date.now() >= session.expiresAt.getTime();
+	const sessionExpired = Date.now() >= new Date(session.expiresAt).getTime();
 	if (sessionExpired) {
 		await db.delete(table.sessions).where(eq(table.sessions.id, session.id));
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= new Date(session.expiresAt).getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
+		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30).toISOString();
 		await db
 			.update(table.sessions)
 			.set({ expiresAt: session.expiresAt })
