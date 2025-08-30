@@ -16,6 +16,36 @@ export default defineConfig({
 	],
 	test: {
 		expect: { requireAssertions: true },
+		coverage: {
+			enabled: true,
+			provider: 'v8',
+			reporter: ['text', 'html', 'json'],
+			reportsDirectory: './coverage',
+			exclude: [
+				'node_modules/**',
+				'dist/**',
+				'coverage/**',
+				'.svelte-kit/**',
+				'src/stories/**',
+				'**/*.stories.{js,ts,svelte}',
+				'**/*.config.{js,ts}',
+				'src/app.html',
+				'src/hooks.{js,ts}',
+				'src/hooks.server.{js,ts}',
+				'src/worker-configuration.d.ts',
+				'src/lib/paraglide/**',
+				'vitest-setup-client.ts'
+			],
+			include: ['src/**/*.{js,ts,svelte}'],
+			thresholds: {
+				global: {
+					branches: 80,
+					functions: 80,
+					lines: 80,
+					statements: 80
+				}
+			}
+		},
 		projects: [
 			{
 				extends: './vite.config.ts',
