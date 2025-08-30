@@ -40,6 +40,7 @@
 		"shellcheck",
 		"sqlfluff",
 		"swiftlint",
+		"totp",
 		"vite",
 		"WCAG"
 	]

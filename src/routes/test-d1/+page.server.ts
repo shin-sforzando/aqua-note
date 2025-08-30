@@ -14,14 +14,15 @@ export const load: PageServerLoad = async ({ platform }) => {
 	try {
 		const db = getDb(platform);
 
-		// Test query to check D1 connection - count users
-		await db.select({ count: table.user.id }).from(table.user).limit(1);
+		// Test query to check D1 connection - simple select
+		const result = await db.select().from(table.users).limit(1);
+		const userCount = result.length;
 
 		return {
 			d1Status: 'connected',
 			message: 'D1 database is successfully connected!',
 			timestamp: new Date().toISOString(),
-			debug: `Query executed successfully. User table accessible.`
+			debug: `Query executed successfully. User count: ${userCount}`
 		};
 	} catch (error) {
 		return {

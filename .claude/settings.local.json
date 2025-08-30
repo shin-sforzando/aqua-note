@@ -10,6 +10,7 @@
 			"Bash(gh run list:*)",
 			"Bash(gh run view:*)",
 			"Bash(git log:*)",
+			"Bash(lsof:*)",
 			"Bash(npm install)",
 			"Bash(npm run build:*)",
 			"Bash(npm run check:*)",

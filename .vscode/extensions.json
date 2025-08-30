@@ -4,6 +4,7 @@
 		"davidanson.vscode-markdownlint",
 		"editorconfig.editorconfig",
 		"ms-playwright.playwright",
+		"mtxr.sqltools-driver-sqlite",
 		"shd101wyy.markdown-preview-enhanced",
 		"streetsidesoftware.code-spell-checker",
 		"svelte.svelte-vscode",
