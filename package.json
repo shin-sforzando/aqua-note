@@ -11,6 +11,7 @@
 		"prepare": "svelte-kit sync || echo 'svelte-kit sync skipped' && husky || true",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"pretest": "npm run format && npm run lint && npm run check",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:unit": "vitest",
 		"test:e2e": "playwright test",

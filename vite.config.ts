@@ -3,6 +3,7 @@ import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
 	plugins: [
@@ -14,6 +15,11 @@ export default defineConfig({
 			outdir: './src/lib/paraglide'
 		})
 	],
+	resolve: {
+		alias: {
+			$lib: path.resolve('./src/lib')
+		}
+	},
 	test: {
 		expect: { requireAssertions: true },
 		coverage: {
@@ -22,18 +28,18 @@ export default defineConfig({
 			reporter: ['text', 'html', 'json'],
 			reportsDirectory: './coverage',
 			exclude: [
-				'node_modules/**',
-				'dist/**',
-				'coverage/**',
 				'.svelte-kit/**',
-				'src/stories/**',
-				'**/*.stories.{js,ts,svelte}',
 				'**/*.config.{js,ts}',
+				'**/*.stories.{js,ts,svelte}',
+				'coverage/**',
+				'dist/**',
+				'node_modules/**',
 				'src/app.html',
 				'src/hooks.{js,ts}',
 				'src/hooks.server.{js,ts}',
-				'src/worker-configuration.d.ts',
 				'src/lib/paraglide/**',
+				'src/stories/**',
+				'src/worker-configuration.d.ts',
 				'vitest-setup-client.ts'
 			],
 			include: ['src/**/*.{js,ts,svelte}'],
