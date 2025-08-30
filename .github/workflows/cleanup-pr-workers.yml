@@ -1,0 +1,68 @@
+name: Cleanup PR Workers
+
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  NODE_VERSION: '24'
+  HUSKY: 0 # Disable Husky in CI environment
+
+jobs:
+  cleanup:
+    name: Delete PR Worker
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Delete PR Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: delete --name aqua-note-pr-${{ github.event.number }} --force
+        continue-on-error: true
+
+      - name: Delete GitHub deployment
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const deployments = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment: `pr-${{ github.event.number }}`,
+            });
+
+            for (const deployment of deployments.data) {
+              // Set deployment to inactive
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                state: 'inactive',
+                description: 'PR closed - cleaning up deployment'
+              });
+            }
+
+      - name: Notify cleanup success
+        if: success()
+        run: |
+          echo "✅ Successfully cleaned up PR worker: aqua-note-pr-${{ github.event.number }}"
+
+      - name: Notify cleanup failure
+        if: failure()
+        run: |
+          echo "❌ Failed to cleanup PR worker: aqua-note-pr-${{ github.event.number }}"
+          echo "Manual cleanup may be required."

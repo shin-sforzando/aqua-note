@@ -149,3 +149,10 @@ $RECYCLE.BIN/
 
 # Serena MCP cache files
 .serena/cache/
+
+# Test coverage reports
+coverage/
+
+# git-secret
+.gitsecret/keys/random_seed
+!*.secret

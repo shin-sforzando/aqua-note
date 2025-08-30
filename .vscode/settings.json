@@ -19,6 +19,7 @@
 		"docstrings",
 		"dotenv",
 		"gantt",
+		"gitsecret",
 		"golangci",
 		"htmlhint",
 		"inlang",
