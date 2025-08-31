@@ -11,6 +11,7 @@
 		"prepare": "svelte-kit sync || echo 'svelte-kit sync skipped' && husky || true",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"pretest": "npm run format && npm run lint && npm run check",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:unit": "vitest",
 		"test:e2e": "playwright test",
@@ -30,7 +31,7 @@
 		"build-storybook": "storybook build"
 	},
 	"dependencies": {
-		"@cloudflare/workers-types": "^4.20250830.0",
+		"@cloudflare/workers-types": "^4.20250831.0",
 		"@inlang/paraglide-js": "^2.2.0",
 		"@libsql/client": "^0.15.14",
 		"@node-rs/argon2": "^2.0.2",
