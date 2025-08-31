@@ -102,4 +102,4 @@ const handleLogging: Handle = async ({ event, resolve }) => {
 	}
 };
 
-export const handle: Handle = sequence(handleParaglide, handleAuth, handleLogging);
+export const handle: Handle = sequence(handleParaglide, handleLogging, handleAuth);
