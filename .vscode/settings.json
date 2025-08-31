@@ -25,6 +25,7 @@
 		"inlang",
 		"languagetool",
 		"libsql",
+		"Logpush",
 		"luacheck",
 		"markuplint",
 		"mdsvex",
