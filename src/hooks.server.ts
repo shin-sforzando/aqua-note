@@ -18,19 +18,23 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const requestContext = createRequestContext(event);
+	const sessionToken = event.cookies.get(auth.sessionCookieName);
+
+	if (!sessionToken) {
+		logger.logAuth('No session token found', requestContext);
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
+	}
+
+	const timer = new PerformanceTimer('session_validation');
+	let session = null;
+	let user = null;
 
 	try {
-		const sessionToken = event.cookies.get(auth.sessionCookieName);
-
-		if (!sessionToken) {
-			logger.logAuth('No session token found', requestContext);
-			event.locals.user = null;
-			event.locals.session = null;
-			return resolve(event);
-		}
-
-		const timer = new PerformanceTimer('session_validation');
-		const { session, user } = await auth.validateSessionToken(event.platform!, sessionToken);
+		const result = await auth.validateSessionToken(event.platform!, sessionToken);
+		session = result.session;
+		user = result.user;
 
 		if (session) {
 			auth.setSessionTokenCookie(event, sessionToken, new Date(session.expiresAt));
@@ -39,34 +43,37 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 				userId: user?.id,
 				sessionId: session.id
 			});
-			timer.end(true, { userId: user?.id });
 		} else {
 			auth.deleteSessionTokenCookie(event);
 			logger.logAuth('Invalid session token', requestContext);
-			timer.end(false);
 		}
-
-		event.locals.user = user;
-		event.locals.session = session;
-		return resolve(event);
 	} catch (error) {
 		logger.logError(error as Error, 'Authentication error', requestContext);
 		// 認証エラーでもアプリは継続動作させる
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
+		auth.deleteSessionTokenCookie(event);
+	} finally {
+		// タイマーは必ず終了させる
+		timer.end(!!session, { userId: user?.id });
 	}
+
+	event.locals.user = user;
+	event.locals.session = session;
+	return resolve(event);
 };
 
 // グローバルエラーハンドリングとリクエストログ
 const handleLogging: Handle = async ({ event, resolve }) => {
 	const requestContext = createRequestContext(event);
 	const timer = new PerformanceTimer(`${event.request.method} ${requestContext.url}`);
+	let response: Response;
+	let statusCode = 500;
 
 	logger.logRequestStart(requestContext);
 
 	try {
-		const response = await resolve(event);
+		response = await resolve(event);
+		statusCode = response.status;
+		response.headers.set('x-request-id', requestContext.requestId || '');
 
 		const finalContext = {
 			...requestContext,
@@ -76,8 +83,6 @@ const handleLogging: Handle = async ({ event, resolve }) => {
 		};
 
 		logger.logRequestEnd(finalContext);
-		timer.end(response.status < 400, { statusCode: response.status });
-
 		return response;
 	} catch (error) {
 		const finalContext = {
@@ -88,10 +93,12 @@ const handleLogging: Handle = async ({ event, resolve }) => {
 		};
 
 		logger.logError(error as Error, 'Unhandled request error', finalContext);
-		timer.end(false, { statusCode: 500 });
 
 		// エラーを再スローして、SvelteKitのデフォルトエラーハンドリングに委ねる
 		throw error;
+	} finally {
+		// タイマーは必ず終了させる
+		timer.end(statusCode < 400, { statusCode });
 	}
 };
 
