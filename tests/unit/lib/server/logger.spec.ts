@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { logger, createRequestContext, PerformanceTimer } from '$lib/server/logger';
 import type { LogContext } from '$lib/server/logger';
 
-// console.log, console.error等をモック
+// Mock console.log, console.error, etc.
 const mockConsole = {
 	log: vi.fn(),
 	info: vi.fn(),
@@ -13,14 +13,14 @@ const mockConsole = {
 
 describe('Logger', () => {
 	beforeEach(() => {
-		// console関数をモック
+		// Mock console functions
 		vi.stubGlobal('console', mockConsole);
-		// 各テスト前にモックをリセット
+		// Reset mocks before each test
 		vi.clearAllMocks();
 	});
 
-	describe('基本的なログ出力', () => {
-		it('info レベルのログが正しく出力される', () => {
+	describe('Basic log output', () => {
+		it('info level logs are output correctly', () => {
 			const message = 'Test info message';
 			const context: LogContext = { userId: 'test-user' };
 
@@ -36,7 +36,7 @@ describe('Logger', () => {
 			expect(logEntry.timestamp).toBeDefined();
 		});
 
-		it('error レベルのログが正しく出力される', () => {
+		it('error level logs are output correctly', () => {
 			const message = 'Test error message';
 			logger.error(message);
 
@@ -48,7 +48,7 @@ describe('Logger', () => {
 			expect(logEntry.message).toBe(message);
 		});
 
-		it('warn レベルのログが正しく出力される', () => {
+		it('warn level logs are output correctly', () => {
 			const message = 'Test warning message';
 			logger.warn(message);
 
@@ -60,7 +60,7 @@ describe('Logger', () => {
 			expect(logEntry.message).toBe(message);
 		});
 
-		it('debug レベルのログが正しく出力される', () => {
+		it('debug level logs are output correctly', () => {
 			const message = 'Test debug message';
 			logger.debug(message);
 
@@ -73,8 +73,8 @@ describe('Logger', () => {
 		});
 	});
 
-	describe('セキュリティ機能', () => {
-		it('機密情報が自動的に除去される', () => {
+	describe('Security features', () => {
+		it('sensitive information is automatically removed', () => {
 			const context: LogContext = {
 				userId: 'test-user',
 				password: 'secret-password',
@@ -96,8 +96,8 @@ describe('Logger', () => {
 		});
 	});
 
-	describe('エラーログ機能', () => {
-		it('Errorオブジェクトが正しく処理される', () => {
+	describe('Error logging functionality', () => {
+		it('Error objects are processed correctly', () => {
 			const error = new Error('Test error');
 			error.stack = 'Error stack trace';
 
@@ -113,7 +113,7 @@ describe('Logger', () => {
 			expect(logEntry.context.error.stack).toBe('Error stack trace');
 		});
 
-		it('メッセージが指定されない場合はデフォルトメッセージが使用される', () => {
+		it('default message is used when message is not specified', () => {
 			const error = new Error('Test error');
 
 			logger.logError(error);
@@ -125,8 +125,8 @@ describe('Logger', () => {
 		});
 	});
 
-	describe('認証ログ機能', () => {
-		it('認証関連のログが正しく出力される', () => {
+	describe('Authentication log functionality', () => {
+		it('authentication-related logs are output correctly', () => {
 			const context: LogContext = {
 				userId: 'test-user',
 				sessionId: 'session-123'
@@ -144,8 +144,8 @@ describe('Logger', () => {
 		});
 	});
 
-	describe('パフォーマンスメトリクス', () => {
-		it('メトリクスが正しく記録される', () => {
+	describe('Performance metrics', () => {
+		it('metrics are recorded correctly', () => {
 			logger.logMetrics('database_query', 150, true, { rowCount: 5 });
 
 			expect(mockConsole.info).toHaveBeenCalledTimes(1);
@@ -163,13 +163,13 @@ describe('Logger', () => {
 
 describe('createRequestContext', () => {
 	beforeEach(() => {
-		// crypto.randomUUID をモック
+		// Mock crypto.randomUUID
 		vi.stubGlobal('crypto', {
 			randomUUID: vi.fn(() => 'test-uuid')
 		});
 	});
 
-	it('リクエストコンテキストが正しく生成される', () => {
+	it('request context is generated correctly', () => {
 		const mockEvent = {
 			request: new Request('https://example.com/api/test?param=value', {
 				method: 'POST',
@@ -193,7 +193,7 @@ describe('createRequestContext', () => {
 		expect(context.url).toBe('/api/test?param=value');
 	});
 
-	it('オプショナルフィールドが未定義でも動作する', () => {
+	it('works even when optional fields are undefined', () => {
 		const mockEvent = {
 			request: new Request('https://example.com/test', {
 				method: 'GET'
@@ -219,7 +219,7 @@ describe('PerformanceTimer', () => {
 		vi.clearAllMocks();
 	});
 
-	it('パフォーマンス計測が正しく動作する', () => {
+	it('performance measurement works correctly', () => {
 		const timer = new PerformanceTimer('test_operation');
 		timer.end(true, { additionalData: 'test' });
 
@@ -234,7 +234,7 @@ describe('PerformanceTimer', () => {
 		expect(logEntry.context.additionalData).toBe('test');
 	});
 
-	it('失敗ケースも正しく記録される', () => {
+	it('failure cases are also recorded correctly', () => {
 		const timer = new PerformanceTimer('failed_operation');
 		timer.end(false);
 
@@ -245,13 +245,13 @@ describe('PerformanceTimer', () => {
 	});
 });
 
-describe('環境別ログレベル制御', () => {
+describe('Environment-specific log level control', () => {
 	beforeEach(() => {
 		vi.stubGlobal('console', mockConsole);
 		vi.clearAllMocks();
 	});
 
-	it('debugログが出力される', () => {
+	it('debug logs are output', () => {
 		logger.debug('Debug message');
 		expect(mockConsole.debug).toHaveBeenCalledTimes(1);
 	});

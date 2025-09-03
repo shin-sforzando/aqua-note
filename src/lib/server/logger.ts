@@ -36,7 +36,7 @@ class Logger {
 	}
 
 	private sanitizeContext(context: LogContext): LogContext {
-		// セキュリティ上の理由で機密情報を除外
+		// Exclude sensitive information for security reasons
 		const sanitized = { ...context };
 		delete sanitized.password;
 		delete sanitized.passwordHash;
@@ -48,7 +48,7 @@ class Logger {
 	private shouldLog(level: LogLevel): boolean {
 		const env = globalThis.process?.env?.NODE_ENV || 'development';
 
-		// 本番環境ではdebugログを無効化
+		// Disable debug logs in production environment
 		if (env === 'production' && level === 'debug') {
 			return false;
 		}
@@ -63,8 +63,8 @@ class Logger {
 
 		const entry = this.createLogEntry(level, message, context);
 
-		// Cloudflare Workers Logsが自動収集するため、console APIを使用
-		// 構造化データをJSONとして出力することで、Logpushでの解析が容易になる
+		// Use console API as Cloudflare Workers Logs automatically collects them
+		// Output structured data as JSON for easier parsing with Logpush
 		switch (level) {
 			case 'error':
 				console.error(JSON.stringify(entry));
@@ -99,7 +99,7 @@ class Logger {
 		this.log('error', message, context);
 	}
 
-	// エラーオブジェクトを自動的にコンテキストに変換
+	// Automatically convert error objects to context
 	logError(error: Error, message?: string, additionalContext?: LogContext): void {
 		const context: LogContext = {
 			error: {
@@ -113,7 +113,7 @@ class Logger {
 		this.error(message || `Uncaught error: ${error.message}`, context);
 	}
 
-	// パフォーマンスメトリクスのログ
+	// Performance metrics log
 	logMetrics(
 		operation: string,
 		duration: number,
@@ -128,26 +128,26 @@ class Logger {
 		});
 	}
 
-	// 認証関連のログ
+	// Authentication-related log
 	logAuth(action: string, context: LogContext): void {
 		this.info(`Auth: ${action}`, context);
 	}
 
-	// リクエスト開始ログ
+	// Request start log
 	logRequestStart(context: LogContext): void {
 		this.info('Request started', context);
 	}
 
-	// リクエスト完了ログ
+	// Request completion log
 	logRequestEnd(context: LogContext): void {
 		this.info('Request completed', context);
 	}
 }
 
-// シングルトンインスタンス
+// Singleton instance
 export const logger = new Logger();
 
-// リクエストコンテキストからLogContextを生成するヘルパー
+// Helper to generate LogContext from request context
 export function createRequestContext(event: {
 	request: Request;
 	locals?: { user?: { id: string } | null; session?: { id: string } | null };
@@ -166,7 +166,7 @@ export function createRequestContext(event: {
 	};
 }
 
-// パフォーマンス計測用のヘルパー
+// Performance measurement helper
 export class PerformanceTimer {
 	private startTime: number;
 	private operation: string;
