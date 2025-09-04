@@ -49,10 +49,10 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		}
 	} catch (error) {
 		logger.logError(error as Error, 'Authentication error', requestContext);
-		// 認証エラーでもアプリは継続動作させる
+		// Continue app operation even on auth errors
 		auth.deleteSessionTokenCookie(event);
 	} finally {
-		// タイマーは必ず終了させる
+		// Always end timer
 		timer.end(!!session, { userId: user?.id });
 	}
 
@@ -61,7 +61,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-// グローバルエラーハンドリングとリクエストログ
+// Global error handling and request logging
 const handleLogging: Handle = async ({ event, resolve }) => {
 	const requestContext = createRequestContext(event);
 	const timer = new PerformanceTimer(`${event.request.method} ${requestContext.url}`);
@@ -94,10 +94,10 @@ const handleLogging: Handle = async ({ event, resolve }) => {
 
 		logger.logError(error as Error, 'Unhandled request error', finalContext);
 
-		// エラーを再スローして、SvelteKitのデフォルトエラーハンドリングに委ねる
+		// Re-throw error to delegate to SvelteKit's default error handling
 		throw error;
 	} finally {
-		// タイマーは必ず終了させる
+		// Always end timer
 		timer.end(statusCode < 400, { statusCode });
 	}
 };

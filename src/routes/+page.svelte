@@ -1,6 +1,6 @@
 <script lang="ts">
-	// Coming Soon ページ - 仮実装
-	// 将来的にSvelte-UXを導入時にコンポーネント化予定
+	// Coming Soon page - temporary implementation
+	// Planned to be componentized when Svelte-UX is introduced in the future
 </script>
 
 <svelte:head>
@@ -31,7 +31,7 @@
 	class="min-h-screen bg-gradient-to-b from-cyan-50 via-blue-50 to-blue-100 flex items-center justify-center px-4"
 >
 	<div class="text-center max-w-4xl mx-auto">
-		<!-- ロゴエリア -->
+		<!-- Logo area -->
 		<div class="mb-8">
 			<img src="/logo.svg" alt="Aqua Note Logo" class="w-32 h-32 mx-auto mb-4" />
 			<h1
@@ -42,7 +42,7 @@
 			<p class="text-xl md:text-2xl text-gray-700">水槽管理をもっとシンプルに</p>
 		</div>
 
-		<!-- Coming Soon カード -->
+		<!-- Coming Soon card -->
 		<div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12">
 			<span
 				class="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-semibold mb-6 font-mono"
@@ -64,7 +64,7 @@
 				有料プランもご用意する予定です。
 			</p>
 
-			<!-- 機能プレビュー -->
+			<!-- Feature preview -->
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mb-8">
 				<div class="flex items-start space-x-3">
 					<svg
@@ -130,7 +130,7 @@
 				</div>
 			</div>
 
-			<!-- プラン予定 -->
+			<!-- Planned pricing -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 				<div class="border border-gray-200 rounded-lg p-4">
 					<h4 class="font-semibold text-gray-800 mb-2">無料プラン</h4>

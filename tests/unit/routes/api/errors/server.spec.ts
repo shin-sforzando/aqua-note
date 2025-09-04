@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from '$lib/../../src/routes/api/errors/+server';
 
-// logger モジュールをモック
+// Mock the logger module
 vi.mock('$lib/server/logger', () => ({
 	logger: {
 		error: vi.fn(),
@@ -9,7 +9,7 @@ vi.mock('$lib/server/logger', () => ({
 	}
 }));
 
-// SvelteKit の json ヘルパーをモック
+// Mock SvelteKit's json helper
 vi.mock('@sveltejs/kit', () => ({
 	json: vi.fn(
 		(data, options) =>
@@ -27,7 +27,7 @@ describe('POST /api/errors', () => {
 		vi.clearAllMocks();
 	});
 
-	it('正常なエラーレポートを処理できる', async () => {
+	it('can process valid error reports', async () => {
 		const errorData = {
 			timestamp: '2024-01-01T00:00:00.000Z',
 			level: 'error',
@@ -60,7 +60,7 @@ describe('POST /api/errors', () => {
 		const responseData = (await response.json()) as { success: boolean };
 		expect(responseData.success).toBe(true);
 
-		// logger.error が正しい引数で呼ばれたかチェック
+		// Check if logger.error was called with correct arguments
 		expect(logger.error).toHaveBeenCalledWith(
 			'Client-side error reported',
 			expect.objectContaining({
@@ -80,7 +80,7 @@ describe('POST /api/errors', () => {
 		);
 	});
 
-	it('文字列形式のエラーを正しく処理する', async () => {
+	it('correctly processes string-format errors', async () => {
 		const errorData = {
 			timestamp: '2024-01-01T00:00:00.000Z',
 			level: 'error',
@@ -107,7 +107,7 @@ describe('POST /api/errors', () => {
 
 		expect(response.status).toBe(200);
 
-		// 文字列エラーがオブジェクト形式に変換されているかチェック
+		// Check if string error is converted to object format
 		expect(logger.error).toHaveBeenCalledWith(
 			'Client-side error reported',
 			expect.objectContaining({
@@ -119,7 +119,7 @@ describe('POST /api/errors', () => {
 		);
 	});
 
-	it('不正なJSONを処理した際にエラーを返す', async () => {
+	it('returns error when processing invalid JSON', async () => {
 		const request = new Request('http://localhost/api/errors', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
@@ -135,14 +135,14 @@ describe('POST /api/errors', () => {
 		const responseData = (await response.json()) as { success: boolean };
 		expect(responseData.success).toBe(false);
 
-		// エラーが適切にログ出力されているかチェック
+		// Check if error is properly logged
 		expect(logger.logError).toHaveBeenCalledWith(
 			expect.any(Error),
 			'Failed to process client error report'
 		);
 	});
 
-	it('必要な情報がタイムスタンプと共に記録される', async () => {
+	it('records necessary information with timestamp', async () => {
 		const beforeTime = new Date().toISOString();
 
 		const errorData = {
@@ -174,15 +174,15 @@ describe('POST /api/errors', () => {
 		const logCall = (logger.error as ReturnType<typeof vi.fn>).mock.calls[0];
 		const context = logCall[1];
 
-		// reportedAt が適切な時間範囲内かチェック
+		// Check if reportedAt is within proper time range
 		expect(context.reportedAt).toBeDefined();
 		expect(context.reportedAt >= beforeTime).toBe(true);
 		expect(context.reportedAt <= afterTime).toBe(true);
 
-		// clientTimestamp が正しく記録されているかチェック
+		// Check if clientTimestamp is correctly recorded
 		expect(context.clientTimestamp).toBe('2024-01-01T00:00:00.000Z');
 
-		// IPアドレスが記録されているかチェック
+		// Check if IP address is recorded
 		expect(context.ip).toBe('192.168.1.1');
 	});
 });

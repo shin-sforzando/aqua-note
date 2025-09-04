@@ -9,10 +9,10 @@ import {
 } from 'drizzle-orm/sqlite-core';
 
 // ============================================
-// 認証・決済システム
+// Authentication & Payment System
 // ============================================
 
-// 1. ユーザー
+// 1. User
 export const users = sqliteTable(
 	'users',
 	{
@@ -21,7 +21,7 @@ export const users = sqliteTable(
 		username: text('username').notNull().unique(),
 		displayName: text('display_name'),
 		profilePhotoUrl: text('profile_photo_url'),
-		passwordHash: text('password_hash'), // OAuth専用ユーザーはNULL
+		passwordHash: text('password_hash'), // NULL for users who authenticate via OAuth only
 		stripeCustomerId: text('stripe_customer_id').unique(),
 		emailVerifiedAt: text('email_verified_at'),
 		createdAt: text('created_at').notNull(),
@@ -34,7 +34,7 @@ export const users = sqliteTable(
 	})
 );
 
-// 2. セッション
+// 2. Session
 export const sessions = sqliteTable(
 	'sessions',
 	{
@@ -51,7 +51,7 @@ export const sessions = sqliteTable(
 	})
 );
 
-// 3. OAuth連携
+// 3. OAuth Integration
 export const oauthAccounts = sqliteTable(
 	'oauth_accounts',
 	{
@@ -62,8 +62,8 @@ export const oauthAccounts = sqliteTable(
 		provider: text('provider').notNull(), // google/github/twitter
 		providerUserId: text('provider_user_id').notNull(),
 		providerEmail: text('provider_email'),
-		accessToken: text('access_token'), // 暗号化推奨
-		refreshToken: text('refresh_token'), // 暗号化推奨
+		accessToken: text('access_token'), // Should be encrypted for security
+		refreshToken: text('refresh_token'), // Should be encrypted for security
 		expiresAt: text('expires_at'),
 		createdAt: text('created_at').notNull(),
 		updatedAt: text('updated_at').notNull()
@@ -74,7 +74,7 @@ export const oauthAccounts = sqliteTable(
 	})
 );
 
-// 4. サブスクリプション
+// 4. Subscription
 export const subscriptions = sqliteTable(
 	'subscriptions',
 	{
@@ -107,7 +107,7 @@ export const subscriptions = sqliteTable(
 	})
 );
 
-// 5. 支払い履歴
+// 5. Payment History
 export const paymentHistories = sqliteTable(
 	'payment_histories',
 	{
@@ -117,7 +117,7 @@ export const paymentHistories = sqliteTable(
 			.references(() => users.id),
 		stripePaymentIntentId: text('stripe_payment_intent_id').unique(),
 		stripeInvoiceId: text('stripe_invoice_id').unique(),
-		amount: integer('amount').notNull(), // 円単位
+		amount: integer('amount').notNull(), // In JPY
 		currency: text('currency').default('jpy'),
 		status: text('status').notNull(), // succeeded/failed/pending
 		description: text('description'),
@@ -130,7 +130,7 @@ export const paymentHistories = sqliteTable(
 	})
 );
 
-// 6. Stripeウェブフック
+// 6. Stripe Webhook
 export const stripeWebhookEvents = sqliteTable(
 	'stripe_webhook_events',
 	{
@@ -149,7 +149,7 @@ export const stripeWebhookEvents = sqliteTable(
 	})
 );
 
-// 7. 多要素認証
+// 7. Multi-Factor Authentication
 export const multiFactorAuth = sqliteTable(
 	'multi_factor_auth',
 	{
@@ -158,7 +158,7 @@ export const multiFactorAuth = sqliteTable(
 			.notNull()
 			.references(() => users.id),
 		type: text('type').notNull(), // totp/sms/backup_codes
-		secret: text('secret'), // 暗号化必須
+		secret: text('secret'), // Should be encrypted for security
 		verified: integer('verified', { mode: 'boolean' }).default(false),
 		lastUsedAt: text('last_used_at'),
 		createdAt: text('created_at').notNull(),
@@ -169,7 +169,7 @@ export const multiFactorAuth = sqliteTable(
 	})
 );
 
-// 8. ユーザー設定
+// 8. User Preferences
 export const userPreferences = sqliteTable(
 	'user_preferences',
 	{
@@ -192,7 +192,7 @@ export const userPreferences = sqliteTable(
 	})
 );
 
-// 9. ユーザープロフィール
+// 9. User Profile
 export const userProfiles = sqliteTable(
 	'user_profiles',
 	{
@@ -211,12 +211,12 @@ export const userProfiles = sqliteTable(
 	})
 );
 
-// 10. 監査ログ
+// 10. Audit Log
 export const auditLogs = sqliteTable(
 	'audit_logs',
 	{
 		id: text('id').primaryKey(), // ULID
-		userId: text('user_id').references(() => users.id), // システム操作はNULL
+		userId: text('user_id').references(() => users.id), // NULL for system operations
 		action: text('action').notNull(),
 		entityType: text('entity_type'),
 		entityId: text('entity_id'),
@@ -234,10 +234,10 @@ export const auditLogs = sqliteTable(
 );
 
 // ============================================
-// アクアリウム管理システム
+// Aquarium Management System
 // ============================================
 
-// 11. タグマスタ
+// 11. Tag Master
 export const tags = sqliteTable(
 	'tags',
 	{
@@ -254,7 +254,7 @@ export const tags = sqliteTable(
 	})
 );
 
-// 12. 水槽
+// 12. Aquarium
 export const aquariums = sqliteTable(
 	'aquariums',
 	{
@@ -281,7 +281,7 @@ export const aquariums = sqliteTable(
 	})
 );
 
-// 13. 水槽タグ関連
+// 13. Aquarium Tag Relation
 export const aquariumTagRelations = sqliteTable(
 	'aquarium_tag_relations',
 	{
@@ -300,7 +300,7 @@ export const aquariumTagRelations = sqliteTable(
 	})
 );
 
-// 14. 水槽仕様
+// 14. Aquarium Specification
 export const aquariumSpecs = sqliteTable(
 	'aquarium_specs',
 	{
@@ -334,7 +334,7 @@ export const aquariumSpecs = sqliteTable(
 	})
 );
 
-// 15. 飼育生体
+// 15. Aquarium Livestock
 export const aquariumLivestock = sqliteTable(
 	'aquarium_livestock',
 	{
@@ -360,7 +360,7 @@ export const aquariumLivestock = sqliteTable(
 	})
 );
 
-// 16. メンテナンス記録
+// 16. Maintenance Record
 export const maintenanceRecords = sqliteTable(
 	'maintenance_records',
 	{
@@ -383,7 +383,7 @@ export const maintenanceRecords = sqliteTable(
 	})
 );
 
-// 17. 水換え詳細
+// 17. Water Change Detail
 export const waterChanges = sqliteTable(
 	'water_changes',
 	{
@@ -407,7 +407,7 @@ export const waterChanges = sqliteTable(
 	})
 );
 
-// 18. 給餌詳細
+// 18. Feeding Record
 export const feedingRecords = sqliteTable(
 	'feeding_records',
 	{
@@ -428,7 +428,7 @@ export const feedingRecords = sqliteTable(
 	})
 );
 
-// 19. 添加剤投入詳細
+// 19. Additive Record
 export const additiveRecords = sqliteTable(
 	'additive_records',
 	{
@@ -450,7 +450,7 @@ export const additiveRecords = sqliteTable(
 	})
 );
 
-// 20. 観察記録詳細
+// 20. Observation Record
 export const observationRecords = sqliteTable(
 	'observation_records',
 	{
@@ -471,7 +471,7 @@ export const observationRecords = sqliteTable(
 	})
 );
 
-// 21. 水質パラメータ
+// 21. Water Parameters
 export const waterParameters = sqliteTable(
 	'water_parameters',
 	{
@@ -498,7 +498,7 @@ export const waterParameters = sqliteTable(
 	})
 );
 
-// 22. 水槽写真
+// 22. Aquarium Photos
 export const aquariumPhotos = sqliteTable(
 	'aquarium_photos',
 	{
@@ -518,7 +518,7 @@ export const aquariumPhotos = sqliteTable(
 	})
 );
 
-// 23. 記録写真
+// 23. Record Photos
 export const recordPhotos = sqliteTable(
 	'record_photos',
 	{
@@ -539,7 +539,7 @@ export const recordPhotos = sqliteTable(
 	})
 );
 
-// 24. メンテナンススケジュール
+// 24. Maintenance Schedule
 export const maintenanceSchedules = sqliteTable(
 	'maintenance_schedules',
 	{
@@ -550,7 +550,7 @@ export const maintenanceSchedules = sqliteTable(
 		scheduleName: text('schedule_name').notNull(),
 		categories: text('categories', { mode: 'json' }).notNull(), // array of strings
 		intervalDays: integer('interval_days').notNull(),
-		preferredTime: text('preferred_time'), // TIME型をTEXTで表現
+		preferredTime: text('preferred_time'),
 		lastPerformedDate: text('last_performed_date'),
 		nextDueDate: text('next_due_date').notNull(),
 		isActive: integer('is_active', { mode: 'boolean' }).default(true),
@@ -566,7 +566,7 @@ export const maintenanceSchedules = sqliteTable(
 	})
 );
 
-// 25. 通知
+// 25. Notification
 export const notifications = sqliteTable(
 	'notifications',
 	{
@@ -593,10 +593,10 @@ export const notifications = sqliteTable(
 );
 
 // ============================================
-// 型推論用のエクスポート
+// Type Inference Exports
 // ============================================
 
-// 認証・決済系テーブルの型
+// Authentication & Payment system table types
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type OAuthAccount = typeof oauthAccounts.$inferSelect;
@@ -608,7 +608,7 @@ export type UserPreferences = typeof userPreferences.$inferSelect;
 export type UserProfile = typeof userProfiles.$inferSelect;
 export type AuditLog = typeof auditLogs.$inferSelect;
 
-// アクアリウム管理系テーブルの型
+// Aquarium management system table types
 export type Tag = typeof tags.$inferSelect;
 export type Aquarium = typeof aquariums.$inferSelect;
 export type AquariumTagRelation = typeof aquariumTagRelations.$inferSelect;
@@ -625,7 +625,7 @@ export type RecordPhoto = typeof recordPhotos.$inferSelect;
 export type MaintenanceSchedule = typeof maintenanceSchedules.$inferSelect;
 export type Notification = typeof notifications.$inferSelect;
 
-// Insert用の型
+// Insert types
 export type NewUser = typeof users.$inferInsert;
 export type NewSession = typeof sessions.$inferInsert;
 export type NewOAuthAccount = typeof oauthAccounts.$inferInsert;

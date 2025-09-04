@@ -10,40 +10,40 @@ updates:
       timezone: 'Asia/Tokyo'
     open-pull-requests-limit: 10
     groups:
-      # SvelteKitとその関連パッケージ
+      # SvelteKit and related packages
       sveltekit:
         patterns:
           - '@sveltejs/*'
           - 'svelte'
           - 'svelte-*'
-      # Storybookとその関連パッケージ
+      # Storybook and related packages
       storybook:
         patterns:
           - '@storybook/*'
           - 'storybook'
-      # Viteとその関連パッケージ
+      # Vite and related packages
       vite:
         patterns:
           - 'vite'
           - '@vitejs/*'
           - 'vitest'
-      # Cloudflare関連パッケージ
+      # Cloudflare-related packages
       cloudflare:
         patterns:
           - '@cloudflare/*'
           - 'wrangler'
-      # 型定義パッケージ
+      # Type definition packages
       types:
         patterns:
           - '@types/*'
-      # Lintツール
+      # Linting tools
       linters:
         patterns:
           - 'eslint*'
           - 'prettier*'
           - '@eslint/*'
           - '@typescript-eslint/*'
-      # テストツール
+      # Testing tools
       testing:
         patterns:
           - 'playwright'

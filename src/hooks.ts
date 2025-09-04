@@ -3,9 +3,9 @@ import type { HandleClientError } from '@sveltejs/kit';
 
 export const reroute = (request) => deLocalizeUrl(request.url).pathname;
 
-// クライアントサイドエラートラッキング
+// Client-side error tracking
 export const handleError: HandleClientError = async ({ error, event, status, message }) => {
-	// エラー情報を構造化
+	// Structure error information
 	const errorData = {
 		timestamp: new Date().toISOString(),
 		level: 'error' as const,
@@ -26,10 +26,10 @@ export const handleError: HandleClientError = async ({ error, event, status, mes
 		}
 	};
 
-	// コンソールに出力（Cloudflare Workers Logsが自動収集）
+	// Output to console (automatically collected by Cloudflare Workers Logs)
 	console.error(JSON.stringify(errorData));
 
-	// サーバーにエラー情報を送信（オプション）
+	// Send error information to server (optional)
 	try {
 		await fetch('/api/errors', {
 			method: 'POST',
@@ -38,10 +38,10 @@ export const handleError: HandleClientError = async ({ error, event, status, mes
 			},
 			body: JSON.stringify(errorData)
 		}).catch(() => {
-			// エラー送信が失敗してもアプリの動作に影響しないようにする
+			// Don't affect app operation even if error sending fails
 		});
 	} catch {
-		// サイレントに失敗させる
+		// Fail silently
 	}
 
 	return {

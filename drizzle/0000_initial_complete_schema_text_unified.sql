@@ -469,7 +469,6 @@ CREATE INDEX `idx_water_parameters_aquarium_id` ON `water_parameters` (`aquarium
 --> statement-breakpoint
 CREATE INDEX `idx_water_parameters_measured_at` ON `water_parameters` (`measured_at`);
 --> statement-breakpoint
--- 部分インデックス（パフォーマンス最適化）
 CREATE INDEX `idx_aquariums_active_user` ON `aquariums` (`user_id`)
 WHERE `is_active` = 1;
 --> statement-breakpoint

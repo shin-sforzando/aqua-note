@@ -25,7 +25,7 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 	try {
 		const errorData = (await request.json()) as ClientErrorData;
 
-		// クライアントからのエラー情報をサーバーログに記録
+		// Record client-side error information to server log
 		const { error: clientError, ...restContext } = errorData.context;
 		const processedError =
 			typeof clientError === 'string' ? { name: 'Error', message: clientError } : clientError;
