@@ -25,9 +25,30 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
+      - name: Get PR information from comment
+        id: pr-info
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request
+        run: |
+          PR_URL="${{ github.event.issue.pull_request.url }}"
+          PR_DATA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL")
+          echo "pr_number=$(echo "$PR_DATA" | jq -r '.number')" >> $GITHUB_OUTPUT
+          echo "pr_head_ref=$(echo "$PR_DATA" | jq -r '.head.ref')" >> $GITHUB_OUTPUT
+          echo "pr_head_sha=$(echo "$PR_DATA" | jq -r '.head.sha')" >> $GITHUB_OUTPUT
+          echo "pr_base_ref=$(echo "$PR_DATA" | jq -r '.base.ref')" >> $GITHUB_OUTPUT
+          echo "is_pr=true" >> $GITHUB_OUTPUT
+
+      - name: Set default values for non-PR events
+        id: default-info
+        if: github.event_name != 'issue_comment' || !github.event.issue.pull_request
+        run: |
+          echo "is_pr=false" >> $GITHUB_OUTPUT
+          echo "pr_head_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
+          # For PR comments, checkout the actual PR branch; otherwise use default
+          ref: ${{ steps.pr-info.outputs.pr_head_sha || steps.default-info.outputs.pr_head_sha }}
           fetch-depth: 0
 
       - name: Run Claude Code
@@ -40,6 +61,8 @@ jobs:
             日本語で応答してください。
             重要: PRレビューの際は、必ず最新のコミットの内容を確認して回答してください。古いコミットの内容で回答しないよう注意してください。
             @CLAUDE.md を参照し、プロジェクトの開発方針を理解した上で回答してください。
+
+            ${{ steps.pr-info.outputs.is_pr == 'true' && format('PRコンテキスト: PR#{0} (ブランチ: {1} → {2})', steps.pr-info.outputs.pr_number, steps.pr-info.outputs.pr_head_ref, steps.pr-info.outputs.pr_base_ref) || '' }}
 
           # Optional: Allow Claude to run specific commands
           # claude_args: |
