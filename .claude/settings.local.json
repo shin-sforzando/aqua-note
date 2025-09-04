@@ -2,6 +2,7 @@
 	"permissions": {
 		"allow": [
 			"Bash(cat:*)",
+			"Bash(gh api:*)",
 			"Bash(gh issue create:*)",
 			"Bash(gh issue list:*)",
 			"Bash(gh issue view:*)",
