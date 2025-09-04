@@ -1,6 +1,7 @@
 -- Database Reset Script for Aqua Note
 -- Delete all tables in proper order considering foreign key constraints
--- Delete detail tables (with foreign key constraints) first
+-- Delete detail tables first due to foreign key constraints
+-- This order prevents constraint violation errors during cleanup
 DROP TABLE IF EXISTS additive_records;
 DROP TABLE IF EXISTS feeding_records;
 DROP TABLE IF EXISTS water_changes;

@@ -21,7 +21,7 @@ export const users = sqliteTable(
 		username: text('username').notNull().unique(),
 		displayName: text('display_name'),
 		profilePhotoUrl: text('profile_photo_url'),
-		passwordHash: text('password_hash'), // NULL for OAuth-only users
+		passwordHash: text('password_hash'), // NULL for users who authenticate via OAuth only
 		stripeCustomerId: text('stripe_customer_id').unique(),
 		emailVerifiedAt: text('email_verified_at'),
 		createdAt: text('created_at').notNull(),
@@ -62,8 +62,8 @@ export const oauthAccounts = sqliteTable(
 		provider: text('provider').notNull(), // google/github/twitter
 		providerUserId: text('provider_user_id').notNull(),
 		providerEmail: text('provider_email'),
-		accessToken: text('access_token'), // Encryption recommended
-		refreshToken: text('refresh_token'), // Encryption recommended
+		accessToken: text('access_token'), // Should be encrypted for security
+		refreshToken: text('refresh_token'), // Should be encrypted for security
 		expiresAt: text('expires_at'),
 		createdAt: text('created_at').notNull(),
 		updatedAt: text('updated_at').notNull()
@@ -158,7 +158,7 @@ export const multiFactorAuth = sqliteTable(
 			.notNull()
 			.references(() => users.id),
 		type: text('type').notNull(), // totp/sms/backup_codes
-		secret: text('secret'), // Encryption required
+		secret: text('secret'), // Should be encrypted for security
 		verified: integer('verified', { mode: 'boolean' }).default(false),
 		lastUsedAt: text('last_used_at'),
 		createdAt: text('created_at').notNull(),
