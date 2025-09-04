@@ -550,7 +550,7 @@ export const maintenanceSchedules = sqliteTable(
 		scheduleName: text('schedule_name').notNull(),
 		categories: text('categories', { mode: 'json' }).notNull(), // array of strings
 		intervalDays: integer('interval_days').notNull(),
-		preferredTime: text('preferred_time'), // TIME型をTEXTで表現
+		preferredTime: text('preferred_time'),
 		lastPerformedDate: text('last_performed_date'),
 		nextDueDate: text('next_due_date').notNull(),
 		isActive: integer('is_active', { mode: 'boolean' }).default(true),
