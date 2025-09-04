@@ -31,7 +31,7 @@
 		"build-storybook": "storybook build"
 	},
 	"dependencies": {
-		"@cloudflare/workers-types": "^4.20250831.0",
+		"@cloudflare/workers-types": "^4.20250904.0",
 		"@inlang/paraglide-js": "^2.2.0",
 		"@libsql/client": "^0.15.14",
 		"@node-rs/argon2": "^2.0.2",
@@ -78,6 +78,6 @@
 		"vite-plugin-devtools-json": "^1.0.0",
 		"vitest": "^3.2.4",
 		"vitest-browser-svelte": "^1.1.0",
-		"wrangler": "^4.33.1"
+		"wrangler": "^4.34.0"
 	}
 }
