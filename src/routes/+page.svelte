@@ -1,6 +1,5 @@
 <script lang="ts">
 	// Coming Soon page - temporary implementation
-	// Planned to be componentized when Svelte-UX is introduced in the future
 </script>
 
 <svelte:head>

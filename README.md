@@ -35,8 +35,6 @@ Aquarium Management Note on the Web.
 - CSS Framework: [Tailwind CSS](https://tailwindcss.com) v4
 - Database: [Cloudflare D1](https://developers.cloudflare.com/d1/) (Serverless SQLite)
 - ORM: [Drizzle ORM](https://orm.drizzle.team/)
-- UI/UX: [Svelte-UX](https://svelte-ux.techniq.dev)
-  - Chart: [LayerChart](https://www.layerchart.com)
 - UI Catalogue: [Storybook](https://storybook.js.org) v9
 - Unit Testing: [Vitest](https://vitest.dev)
 - E2E Testing: [Playwright](https://playwright.dev)

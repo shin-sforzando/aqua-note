@@ -148,7 +148,6 @@ Vitestは2つのプロジェクトで構成:
 
 - [SvelteKit v5](https://svelte.jp/docs/kit/introduction)
 - [Tailwind CSS](https://tailwindcss.com/docs/installation/using-vite)
-- [Svelte-UX](https://svelte-ux.techniq.dev)
 - [LayerChart](https://www.layerchart.com)
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/)
 - [Cloudflare D1](https://developers.cloudflare.com/d1/)

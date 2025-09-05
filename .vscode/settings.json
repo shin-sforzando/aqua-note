@@ -45,5 +45,8 @@
 		"totp",
 		"vite",
 		"WCAG"
-	]
+	],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
 }

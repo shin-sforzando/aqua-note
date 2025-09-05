@@ -2,6 +2,7 @@
 	"permissions": {
 		"allow": [
 			"Bash(cat:*)",
+			"Bash(find:*)",
 			"Bash(gh api:*)",
 			"Bash(gh issue create:*)",
 			"Bash(gh issue list:*)",
@@ -26,6 +27,7 @@
 			"mcp__playwright__browser_navigate",
 			"mcp__playwright__browser_snapshot",
 			"mcp__playwright__browser_take_screenshot",
+			"mcp__playwright__browser_wait_for",
 			"mcp__serena__check_onboarding_performed",
 			"mcp__serena__find_symbol",
 			"mcp__serena__get_symbols_overview",
@@ -41,7 +43,8 @@
 			"WebFetch(domain:docs.mermaidchart.com)",
 			"WebFetch(domain:github.com)",
 			"WebFetch(domain:svelte.dev)",
-			"WebSearch"
+			"WebSearch",
+			"WebFetch(domain:shadcn-svelte.com)"
 		]
 	},
 	"outputStyle": "Explanatory"
