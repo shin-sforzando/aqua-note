@@ -5,10 +5,6 @@
 このドキュメントは、Aqua Noteのビジュアルデザインと UI/UX の一貫性を保つためのガイドラインです。
 Tailwind CSSを効果的に組み合わせて使用することを前提としています。
 
-## 現在の実装状況
-
-**重要**: 現在のUIは仮実装です。Coming Soonページ（`/src/routes/+page.svelte`）に全てのコードが統合されています。
-
 ## デザイン原則
 
 ### 1. 水をテーマにした流動的なデザイン
@@ -136,45 +132,10 @@ Tailwind CSSのデフォルトスケールを使用:
 - `space-8`: 2rem (32px)
 - `space-12`: 3rem (48px)
 
-## コンポーネントパターン
+## コンポーネント
 
-### カード
-
-```svelte
-<div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12">
-  <!-- コンテンツ -->
-</div>
-```
-
-### グラデーションボタン
-
-```svelte
-<button class="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all">
-  ボタンテキスト
-</button>
-```
-
-### バッジ
-
-```svelte
-<span class="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-semibold">
-  BADGE TEXT
-</span>
-```
-
-### アイコン付きリスト項目
-
-```svelte
-<div class="flex items-start space-x-3">
-  <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0">
-    <!-- アイコン -->
-  </svg>
-  <div>
-    <h3 class="font-semibold text-gray-800">見出し</h3>
-    <p class="text-sm text-gray-600">説明文</p>
-  </div>
-</div>
-```
+可能な限り[shadcn-svelte](https://shadcn-svelte.com/docs)を活用する。
+全てのコンポーネントにはStorybookを用意する。
 
 ## レスポンシブデザイン
 
