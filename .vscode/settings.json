@@ -46,6 +46,7 @@
 		"sqlfluff",
 		"swiftlint",
 		"totp",
+		"viewports",
 		"vite",
 		"WCAG"
 	],
