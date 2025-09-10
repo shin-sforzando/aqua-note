@@ -51,7 +51,8 @@
 			"WebFetch(domain:storybook.js.org)",
 			"WebFetch(domain:svelte.dev)",
 			"WebFetch(domain:www.tailwind-variants.org)",
-			"WebSearch"
+			"WebSearch",
+			"Bash(curl:*)"
 		]
 	},
 	"outputStyle": "Explanatory"
