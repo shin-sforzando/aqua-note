@@ -46,7 +46,8 @@
 			"WebFetch(domain:shadcn-svelte.com)",
 			"WebFetch(domain:storybook.js.org)",
 			"WebFetch(domain:svelte.dev)",
-			"WebSearch"
+			"WebSearch",
+			"mcp__playwright__browser_click"
 		]
 	},
 	"outputStyle": "Explanatory"

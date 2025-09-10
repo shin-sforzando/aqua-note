@@ -14,6 +14,6 @@
 
 <Story name="Default" />
 
-<Story name="Mobile View" parameters={{ viewport: { defaultViewport: 'mobile1' } }} />
+<Story name="Mobile View" globals={{ viewport: { value: 'mobile1', isRotated: false } }} />
 
-<Story name="Tablet View" parameters={{ viewport: { defaultViewport: 'tablet' } }} />
+<Story name="Tablet View" globals={{ viewport: { value: 'tablet', isRotated: false } }} />
