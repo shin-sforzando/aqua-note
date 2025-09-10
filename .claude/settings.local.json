@@ -23,9 +23,13 @@
 			"Bash(npx npm-check-updates:*)",
 			"mcp__context7__get-library-docs",
 			"mcp__context7__resolve-library-id",
+			"mcp__playwright__browser_click",
+			"mcp__playwright__browser_close",
 			"mcp__playwright__browser_evaluate",
+			"mcp__playwright__browser_handle_dialog",
 			"mcp__playwright__browser_navigate",
 			"mcp__playwright__browser_snapshot",
+			"mcp__playwright__browser_tabs",
 			"mcp__playwright__browser_take_screenshot",
 			"mcp__playwright__browser_wait_for",
 			"mcp__serena__check_onboarding_performed",
@@ -46,8 +50,7 @@
 			"WebFetch(domain:shadcn-svelte.com)",
 			"WebFetch(domain:storybook.js.org)",
 			"WebFetch(domain:svelte.dev)",
-			"WebSearch",
-			"mcp__playwright__browser_click"
+			"WebSearch"
 		]
 	},
 	"outputStyle": "Explanatory"
