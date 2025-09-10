@@ -77,6 +77,8 @@
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+	--font-sans: 'M PLUS Rounded 1c', sans-serif;
+	--font-mono: 'M PLUS 1 Code', monospace;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -116,5 +118,14 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		font-family: 'M PLUS Rounded 1c', sans-serif;
+	}
+
+	/* Code and technical elements */
+	code,
+	pre,
+	.monospace,
+	.font-mono {
+		font-family: 'M PLUS 1 Code', monospace;
 	}
 }

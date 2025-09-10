@@ -47,14 +47,17 @@ test.describe('Coming Soon Page', () => {
 
 	test('should have proper meta tags for SEO', async ({ page }) => {
 		// Verify meta description
-		const metaDescription = await page.locator('meta[name="description"]').getAttribute('content');
+		const metaDescription = await page
+			.locator('meta[name="description"]')
+			.first()
+			.getAttribute('content');
 		expect(metaDescription).toContain('アクアリウム愛好家のための水槽管理アプリ');
 
 		// Verify OG tags
-		const ogTitle = await page.locator('meta[property="og:title"]').getAttribute('content');
+		const ogTitle = await page.locator('meta[property="og:title"]').first().getAttribute('content');
 		expect(ogTitle).toBe('Aqua Note - 水槽管理をもっとシンプルに');
 
-		const ogUrl = await page.locator('meta[property="og:url"]').getAttribute('content');
+		const ogUrl = await page.locator('meta[property="og:url"]').first().getAttribute('content');
 		expect(ogUrl).toBe('https://aqua-note.app');
 	});
 
