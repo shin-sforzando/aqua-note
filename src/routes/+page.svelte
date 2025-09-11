@@ -1,5 +1,12 @@
 <script lang="ts">
-	// Coming Soon page - temporary implementation
+	import { Badge } from '$lib/components/ui/badge';
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle
+	} from '$lib/components/ui/card';
 </script>
 
 <svelte:head>
@@ -42,117 +49,127 @@
 		</div>
 
 		<!-- Coming Soon card -->
-		<div class="bg-card/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12 border border-border">
-			<span
-				class="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-semibold mb-6 font-mono"
-			>
-				COMING SOON
-			</span>
+		<Card class="backdrop-blur-sm shadow-xl">
+			<CardHeader class="text-center">
+				<Badge class="mx-auto mb-4 font-mono">COMING SOON</Badge>
+				<CardTitle class="text-2xl md:text-3xl">まもなく公開予定</CardTitle>
+				<CardDescription class="text-base leading-relaxed">
+					Aqua Noteは、熱帯魚などの飼育における水換えや給餌などの<br class="hidden md:inline" />
+					メンテナンス作業を簡単に記録・管理できる<br class="hidden md:inline" />
+					アクアリウム愛好家のためのWebアプリケーションです。
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<p class="text-muted-foreground mb-8 leading-relaxed text-center">
+					無料プランで基本機能をお使いいただけます。<br class="hidden md:inline" />
+					より高度な機能をご利用になりたい方向けに、<br class="hidden md:inline" />
+					有料プランもご用意する予定です。
+				</p>
 
-			<h2 class="text-2xl md:text-3xl font-bold text-card-foreground mb-4">まもなく公開予定</h2>
+				<!-- Feature preview -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+					<Card class="p-4">
+						<CardContent class="flex items-start space-x-3 p-0">
+							<svg
+								aria-hidden="true"
+								class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							<div>
+								<h3 class="font-semibold text-card-foreground">水槽管理</h3>
+								<p class="text-sm text-muted-foreground">複数の水槽を一元管理</p>
+							</div>
+						</CardContent>
+					</Card>
 
-			<p class="text-muted-foreground mb-6 leading-relaxed">
-				Aqua Noteは、熱帯魚などの飼育における水換えや給餌などの<br class="hidden md:inline" />
-				メンテナンス作業を簡単に記録・管理できる<br class="hidden md:inline" />
-				アクアリウム愛好家のためのWebアプリケーションです。
-			</p>
+					<Card class="p-4">
+						<CardContent class="flex items-start space-x-3 p-0">
+							<svg
+								aria-hidden="true"
+								class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+								/>
+							</svg>
+							<div>
+								<h3 class="font-semibold text-card-foreground">記録管理</h3>
+								<p class="text-sm text-muted-foreground">メンテナンス履歴を記録</p>
+							</div>
+						</CardContent>
+					</Card>
 
-			<p class="text-muted-foreground mb-8 leading-relaxed">
-				無料プランで基本機能をお使いいただけます。<br class="hidden md:inline" />
-				より高度な機能をご利用になりたい方向けに、<br class="hidden md:inline" />
-				有料プランもご用意する予定です。
-			</p>
-
-			<!-- Feature preview -->
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mb-8">
-				<div class="flex items-start space-x-3">
-					<svg
-						aria-hidden="true"
-						class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-						/>
-					</svg>
-					<div>
-						<h3 class="font-semibold text-card-foreground">水槽管理</h3>
-						<p class="text-sm text-muted-foreground">複数の水槽を一元管理</p>
-					</div>
+					<Card class="p-4">
+						<CardContent class="flex items-start space-x-3 p-0">
+							<svg
+								aria-hidden="true"
+								class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+								/>
+							</svg>
+							<div>
+								<h3 class="font-semibold text-card-foreground">データ分析</h3>
+								<p class="text-sm text-muted-foreground">水質変化を可視化</p>
+							</div>
+						</CardContent>
+					</Card>
 				</div>
 
-				<div class="flex items-start space-x-3">
-					<svg
-						aria-hidden="true"
-						class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-						/>
-					</svg>
-					<div>
-						<h3 class="font-semibold text-card-foreground">記録管理</h3>
-						<p class="text-sm text-muted-foreground">メンテナンス履歴を記録</p>
-					</div>
-				</div>
+				<!-- Planned pricing -->
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<Card>
+						<CardHeader class="text-center">
+							<CardTitle class="text-lg">無料プラン</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<ul class="text-sm text-muted-foreground space-y-1">
+								<li>基本的な水槽管理</li>
+								<li>メンテナンス記録</li>
+								<li>シンプルなデータ表示</li>
+							</ul>
+						</CardContent>
+					</Card>
 
-				<div class="flex items-start space-x-3">
-					<svg
-						aria-hidden="true"
-						class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-						/>
-					</svg>
-					<div>
-						<h3 class="font-semibold text-card-foreground">データ分析</h3>
-						<p class="text-sm text-muted-foreground">水質変化を可視化</p>
-					</div>
+					<Card class="border-primary/30 bg-primary/5">
+						<CardHeader class="text-center">
+							<CardTitle class="text-lg flex items-center justify-center gap-2">
+								有料プラン
+								<Badge variant="default" class="text-xs">予定</Badge>
+							</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<ul class="text-sm text-muted-foreground space-y-1">
+								<li>複数の水槽管理</li>
+								<li>リマインダー・通知</li>
+								<li>高度なアルバム機能</li>
+							</ul>
+						</CardContent>
+					</Card>
 				</div>
-			</div>
-
-			<!-- Planned pricing -->
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-				<div class="border border-border rounded-lg p-4 bg-card">
-					<h4 class="font-semibold text-card-foreground mb-2">無料プラン</h4>
-					<ul class="text-sm text-muted-foreground space-y-1">
-						<li>基本的な水槽管理</li>
-						<li>メンテナンス記録</li>
-						<li>シンプルなデータ表示</li>
-					</ul>
-				</div>
-				<div class="border border-primary/30 rounded-lg p-4 bg-primary/5">
-					<h4 class="font-semibold text-card-foreground mb-2">
-						有料プラン
-						<span class="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full ml-2"
-							>予定</span
-						>
-					</h4>
-					<ul class="text-sm text-muted-foreground space-y-1">
-						<li>複数の水槽管理</li>
-						<li>リマインダー・通知</li>
-						<li>高度なアルバム機能</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	</div>
 </div>

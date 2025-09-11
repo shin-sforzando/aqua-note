@@ -16,7 +16,7 @@ test.describe('Coming Soon Page', () => {
 		await expect(page.locator('text=COMING SOON')).toBeVisible();
 
 		// Verify upcoming release message
-		await expect(page.locator('h2')).toContainText('まもなく公開予定');
+		await expect(page.locator('text=まもなく公開予定')).toBeVisible();
 	});
 
 	test('should display service description', async ({ page }) => {
@@ -37,11 +37,11 @@ test.describe('Coming Soon Page', () => {
 
 	test('should display pricing plans', async ({ page }) => {
 		// Verify free plan
-		await expect(page.locator('h4:has-text("無料プラン")')).toBeVisible();
+		await expect(page.locator('text="無料プラン"')).toBeVisible();
 		await expect(page.locator('li:has-text("基本的な水槽管理")')).toBeVisible();
 
 		// Verify paid plan
-		await expect(page.locator('h4:has-text("有料プラン")')).toBeVisible();
+		await expect(page.locator('text="有料プラン"')).toBeVisible();
 		await expect(page.locator('li:has-text("高度なアルバム機能")')).toBeVisible();
 	});
 
@@ -70,8 +70,8 @@ test.describe('Coming Soon Page', () => {
 		await page.setViewportSize({ width: 375, height: 667 });
 		await expect(page.locator('.text-5xl')).toBeVisible();
 
-		// Verify grid layout (1 column on mobile)
-		const gridContainer = page.locator('.grid').first();
+		// Verify grid layout (1 column on mobile) - targeting the feature preview grid
+		const gridContainer = page.locator('.grid.grid-cols-1.md\\:grid-cols-3').first();
 		await expect(gridContainer).toHaveClass(/grid-cols-1/);
 	});
 });
