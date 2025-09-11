@@ -13,7 +13,7 @@ SvelteKit v5を基盤として、最新のWeb技術スタックで構築され�
 - ソースコード中のコメント、ログ出力などはすべて **英語に統一** せよ
   - 日本語で記述するのは @docs/ 以下の文書と `messages/ja.json` のみ
   - 日本語を検索する正規表現は `[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠ー]`
-- 英語で考えても良いが、ユーザとの応答は必ず **日本語で対応** せよ
+- ユーザとの応答は必ず **日本語で対応** せよ
 - **不確かな情報は必ず確認してから回答** せよ（特に日付、バージョン情報、コマンド名など）
   - 現在は2025年9月、Claude Codeの知識はここから2年ほど古い
   - ユーザから提示されたURLは必ず参照せよ
@@ -148,7 +148,6 @@ Vitestは2つのプロジェクトで構成:
 
 - [SvelteKit v5](https://svelte.jp/docs/kit/introduction)
 - [Tailwind CSS](https://tailwindcss.com/docs/installation/using-vite)
-- [Svelte-UX](https://svelte-ux.techniq.dev)
 - [LayerChart](https://www.layerchart.com)
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/)
 - [Cloudflare D1](https://developers.cloudflare.com/d1/)

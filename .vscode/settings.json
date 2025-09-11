@@ -10,6 +10,7 @@
 	"cSpell.words": [
 		"anthropics",
 		"APAC",
+		"autodocs",
 		"autoincrement",
 		"checkmake",
 		"clippy",
@@ -30,6 +31,7 @@
 		"markuplint",
 		"mdsvex",
 		"mermaidchart",
+		"oklch",
 		"oslojs",
 		"paraglide",
 		"phpcs",
@@ -39,11 +41,16 @@
 		"pylint",
 		"rubocop",
 		"semgrep",
+		"shadcn",
 		"shellcheck",
 		"sqlfluff",
 		"swiftlint",
 		"totp",
+		"viewports",
 		"vite",
 		"WCAG"
-	]
+	],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
 }
