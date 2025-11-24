@@ -45,7 +45,7 @@ jobs:
           echo "pr_head_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # For PR comments, checkout the actual PR branch; otherwise use default
           ref: ${{ steps.pr-info.outputs.pr_head_sha || steps.default-info.outputs.pr_head_sha }}
