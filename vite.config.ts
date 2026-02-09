@@ -2,7 +2,13 @@ import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
 	plugins: [
@@ -51,10 +57,9 @@ export default defineConfig({
 				extends: './vite.config.ts',
 				test: {
 					name: 'client',
-					environment: 'browser',
 					browser: {
 						enabled: true,
-						provider: 'playwright',
+						provider: playwright(),
 						instances: [{ browser: 'chromium' }]
 					},
 					include: [
@@ -75,6 +80,25 @@ export default defineConfig({
 						'src/**/*.svelte.{test,spec}.{js,ts}',
 						'tests/unit/**/*.svelte.{test,spec}.{js,ts}'
 					]
+				}
+			},
+			{
+				extends: true,
+				plugins: [
+					storybookTest({
+						configDir: path.join(__dirname, '.storybook'),
+						storybookScript: 'npm run storybook -- --no-open'
+					})
+				],
+				test: {
+					name: 'storybook',
+					browser: {
+						enabled: true,
+						provider: playwright(),
+						headless: true,
+						instances: [{ browser: 'chromium' }]
+					},
+					setupFiles: ['./.storybook/vitest.setup.ts']
 				}
 			}
 		]
