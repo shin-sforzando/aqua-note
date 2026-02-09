@@ -75,7 +75,9 @@
 			"WebFetch(domain:svelte.dev)",
 			"WebFetch(domain:www.bits-ui.com)",
 			"WebFetch(domain:www.tailwind-variants.org)",
-			"WebSearch"
+			"WebSearch",
+			"WebFetch(domain:biomejs.dev)",
+			"Bash(npm ls:*)"
 		]
 	},
 	"outputStyle": "Explanatory"
